@@ -113,12 +113,12 @@ window.onload = function() {
     			x: x,
     			y: y,
     			state: state
-    		})
+    		});
     	};
 
     	self.add(x, y, state);
 
-    	self.replay = function(context) {
+    	self.replay = function(context) { // TrailContext
 
     		var layer = document.getElementById('user-drawing');
 
