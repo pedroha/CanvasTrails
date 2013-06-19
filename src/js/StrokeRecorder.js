@@ -46,7 +46,11 @@ StrokeRecorder.prototype.setStrokeModel = function(m) {
 StrokeRecorder.prototype.clearScreen = function() {
 	var w = this.userCanvas.width;
 	this.userCanvas.width = w; // Reset the whole canvas!
-}
+
+	// Reset last state
+    var brush = paletteControl.getCurrentBrush();
+    brush.applyStyle(userCanvas.getContext('2d'));
+};
 
 StrokeRecorder.prototype.init = function() {
 	var self = this;

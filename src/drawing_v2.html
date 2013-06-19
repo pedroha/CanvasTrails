@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>draw</title>
+
+    <link rel="stylesheet" href="drawing.css" />
+	<!--[if lt IE 9]><script type="text/javascript" src="excanvas.js"></script><![endif]-->
+    <style>
+
+        #user-drawing {
+            z-index: 100;
+            opacity: 1.0;
+            background: transparent;
+        }
+
+    </style>
+</head>
+<body>
+    
+    <div class="page">
+    
+        <div class="color-container">
+            <div id="color-1" class="color-panel"></div>
+            <div id="color-2" class="color-panel"></div>
+            <div id="color-3" class="color-panel"></div>
+            <div id="color-4" class="color-panel"></div>
+            <div id="color-5" class="color-panel"></div>
+        </div>
+
+        <div id="trail-container">
+            <canvas id="user-drawing" class="drawing"  width="600" height="400">No CANVAS support!!</canvas>
+            <canvas id="trail-drawing" class="drawing" width="600" height="400">No CANVAS support!!</canvas>
+        </div>
+
+        <div id="log"></log>
+    	
+	</div>
+
+    <script src="js/jquery.js"></script>
+    <script src="js/StrokeModel.js"></script>
+    <script src="js/PaletteControl.js"></script>
+    <script src="js/StrokeRecorder.js"></script>
+    <script src="js/StrokePainter.js"></script>
+    <script src="js/App.js"></script>
+
+</body>
+</html>
