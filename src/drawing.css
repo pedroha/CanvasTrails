@@ -1,0 +1,77 @@
+/* Need a better CSS Reset: meyer? */
+body {
+    text-align: center;
+}
+
+/* My CSS classes. Notice no ID-based selector for styling! We don't need to fight against specificity.
+	ID selectors are only used for JS-specific functionality
+*/
+
+.page {
+    margin: 0 auto; /* align: for the rest */ 
+    width: 700px;
+}
+
+.color-container {
+    margin: auto;
+}
+
+.color-panel {
+    background-color: #486D57;
+    width: 90px;
+    height: 45px;
+    padding: 5px;
+    margin: 10px;
+    border: solid 10px #ccc;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+    float: left;
+/*
+	-webkit-transition: background-color .7s ease, width .7s ease, -webkit-border-radius .7s ease, margin-left .7s ease, padding-right .7s ease;
+	-webkit-transition-property: background-color, width, -webkit-border-radius, margin-left, padding-right;
+	-webkit-transition-duration: 0.7s, 0.7s, 0.7s, 0.7s, 0.7s;
+	-webkit-transition-timing-function: ease, ease, ease, ease, ease;
+	-webkit-transition-delay: initial, initial, initial, initial, initial;
+*/
+	-webkit-transition: background-color .7s ease;
+	-webkit-transition-property: background-color;
+	-webkit-transition-duration: 0.7s
+	-webkit-transition-timing-function: ease;
+	-webkit-transition-delay: initial;
+
+	/* FF4+ */
+	-moz-transition: background-color .7s ease;
+	-moz-transition-property: background-color;
+	-moz-transition-duration: 0.7s
+	-moz-transition-timing-function: ease;
+	-moz-transition-delay: initial;
+
+	/* Opera 10.5 */
+	-o-transition: background-color .7s ease;
+	-o-transition-property: background-color;
+	-o-transition-duration: 0.7s
+	-o-transition-timing-function: ease;
+	-o-transition-delay: initial;
+}
+
+.color-panel.selected {
+    border: solid 10px #d37;
+}
+
+.color-panel:hover {
+    border: solid 10px #0abccc;
+}
+
+.color-panel.selected:hover {
+    border: solid 10px #a03;
+}
+
+
+.drawing {
+    margin-top: 20px;
+    border: solid #2c7 16px;
+    -webkit-border-radius: 16px;
+    -moz-border-radius: 16px;
+    border-radius: 16px;
+}

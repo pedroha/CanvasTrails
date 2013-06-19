@@ -1,0 +1,35 @@
+ROADMAP
+
+-----------------------
+DONE
+
+0) Proof of concept [done]
+
+
+-----------------------
+TODO
+
+1) Support for "state": which color was painted with.
+	Each stroke needs to be repainted with "user" color
+
+2) Transparent User Canvas: to control and draw "current" stroke
+   Bug: when painting and "user drawing" happens at the same time.
+
+3) Color palette: brush colors
+   https://kuler.adobe.com/explore/
+   Exercise on jquery selector and output to console for each match.
+
+4) HTML page redesign (mobile friendly)
+
+-----------------------
+Major features
+
+A) Support multiple Animation frames (maybe 4 to 8)
+B) Brush Sizes (up to 4)
+C) Support both brushes: Static (to paint background) and Animated
+D) Support for iPad resolution (normal and retina, mini-ipad)
+
+? Get a UX person (or designer?) to collaborate on the design of the app.
+
+----
+
