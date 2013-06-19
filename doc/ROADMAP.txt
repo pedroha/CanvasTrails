@@ -5,12 +5,13 @@ DONE
 
 0) Proof of concept [done]
 
-
------------------------
-TODO
+a) Fixed: remove a for-loop of 5 repaints (not needed)
 
 1) Support for "state": which color was painted with.
 	Each stroke needs to be repainted with "user" color
+
+-----------------------
+TODO
 
 2) Transparent User Canvas: to control and draw "current" stroke
    Bug: when painting and "user drawing" happens at the same time.
