@@ -1,0 +1,25 @@
+Application Architecture
+
+Classes
+-------
+
+StrokeModel: contains the information for each stroke in the current frame
+StrokeRecorder: records a single stroke
+StrokePlayer: plays a collection of strokes in parallel
+
+	StrokeRecorder:
+		StrokeModel.add(x, y, paintState);
+		StrokeModel.emit("addStroke", new Event(x, y, paintState) );
+
+	StrokeModel.on("addStroke", function(event) { // event.data contains all the info
+		var strokes = self.getStrokeCollection();
+		StrokePlayer.play(strokes);
+	});
+
+Input: StrokeRecorder (UserCanvas: user interactions)
+Output: StrokePlayer (TrailCanvas: for replaying the trail animation)
+
+
+If while animating, there's more input (user drawing)
+	-> queue the request until the animation is done and replay!
+
