@@ -72,16 +72,19 @@ body {
     position: relative;
 }
 
-#user-control, #trail-drawing {
-    position: absolute;
-    top: 0;
-    left: 0;
-}
-
 .drawing {
-    margin-top: 20px;
     border: solid #2c7 16px;
     -webkit-border-radius: 16px;
     -moz-border-radius: 16px;
     border-radius: 16px;
 }
+
+	#user-drawing, #trail-drawing {
+	    position: absolute;
+	    top: 0;
+	    left: 0;
+	}
+
+	#user-drawing {
+		z-index: 1;
+	}

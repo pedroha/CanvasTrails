@@ -27,7 +27,7 @@ BrushStyle.prototype = {
 
 window.onload = function() {
     
-    var canvas = document.getElementById("trail-drawing");
+    var canvas = document.getElementById("user-drawing");
 	var context = canvas.getContext("2d");
 
     // --- Palette -----
@@ -144,8 +144,8 @@ window.onload = function() {
     var paintCanvas = (function(context) {
     	var c = context;
 
-	    c.fillStyle = "#eee";
-	    c.fillRect(0, 0, 1000, 1000);
+	    //c.fillStyle = "#eee";
+	    //c.fillRect(0, 0, 1000, 1000);
 
 	    var strokeCollection = [];
 	    var stroke;
