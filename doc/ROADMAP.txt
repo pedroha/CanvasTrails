@@ -12,12 +12,13 @@ a) Fixed: remove a for-loop of 5 repaints (not needed)
 
 b) Adding a masking layer but still it doesn't work perfectly: user can still paint while drawing is still executing.
 
+2) Transparent User Canvas: to control and draw "current" stroke
+   Bug: when painting and "user drawing" happens at the same time.
+
+   Done: re-architecture (v1)
 
 -----------------------
 TODO
-
-2) Transparent User Canvas: to control and draw "current" stroke
-   Bug: when painting and "user drawing" happens at the same time.
 
 3) Color palette: brush colors
    https://kuler.adobe.com/explore/
@@ -33,7 +34,6 @@ B) Brush Sizes (up to 4)
 C) Support both brushes: Static (to paint background) and Animated
 D) Support for iPad resolution (normal and retina, mini-ipad)
 
-? Get a UX person (or designer?) to collaborate on the design of the app.
+? Collaborate with UX person (or designer?)
 
 ----
-
