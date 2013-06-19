@@ -27,8 +27,8 @@ BrushStyle.prototype = {
 
 window.onload = function() {
     
-    var canvas = document.getElementById("user-drawing");
-	var context = canvas.getContext("2d");
+    var trailCanvas = document.getElementById("trail-drawing");
+	var trailContext = trailCanvas.getContext("2d");
 
     // --- Palette -----
 
@@ -91,7 +91,7 @@ window.onload = function() {
 	    };
     })();
     
-    paletteControl.init(context);
+    paletteControl.init(trailContext);
 
     function Stroke(x, y, state) {
     	var self = this;
@@ -118,6 +118,12 @@ window.onload = function() {
 
     	self.replay = function(context) {
 
+    		var layer = document.getElementById('mask-layer');
+
+    		layer.style.display = 'block'; // Block drawing!
+
+    		//log('Layer blocking: ' + layer.style.zIndex);
+
     		for (var i = 1; i < self.pieces.length; i++) {
     			(function(iter) {
     				var p = self.pieces[iter];
@@ -132,8 +138,18 @@ window.onload = function() {
 	    			}, p.time);
     			})(i);
     		}
+    		
+			// Restore user control
+			var p = self.pieces[self.pieces.length-1];
+    		setTimeout(function() {
+				layer.style.display = 'none';
+    		}, p.time + 10);
     	}
     }
+
+    function log(msg) {
+		$('#log').append(msg);
+	}
 
     function StrokeCollection() {
     	// TODO: save
@@ -141,11 +157,8 @@ window.onload = function() {
 
     //--------------------
 
-    var paintCanvas = (function(context) {
+    var paintCanvas = (function(canvas, context) {
     	var c = context;
-
-	    //c.fillStyle = "#eee";
-	    //c.fillRect(0, 0, 1000, 1000);
 
 	    var strokeCollection = [];
 	    var stroke;
@@ -177,7 +190,7 @@ window.onload = function() {
 
 	        	for (var i=0; i<strokeCollection.length; i++) {
 	        		var s = strokeCollection[i];
-	        		s.replay(context);
+	        		s.replay(trailContext);
 	        	}
 	        }
 	    };
@@ -235,7 +248,7 @@ window.onload = function() {
 	    	};
 	    	return coords;
 	    }
-    })(context);
+    })(trailCanvas, trailContext);
 
 };
 

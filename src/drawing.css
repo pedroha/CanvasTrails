@@ -79,12 +79,23 @@ body {
     border-radius: 16px;
 }
 
-	#user-drawing, #trail-drawing {
+	#mask-layer, #trail-drawing {
 	    position: absolute;
 	    top: 0;
 	    left: 0;
+	    width: 600px;
+	    height: 400px;
 	}
 
-	#user-drawing {
-		z-index: 1;
+	#mask-layer {
+		display: none;
+		overflow: hidden;
+		z-index: 100;
+		opacity: 0.2;
+		background: #999;
+	}
+
+	#log {
+		position: fixed;
+		bottom: 30px;
 	}
