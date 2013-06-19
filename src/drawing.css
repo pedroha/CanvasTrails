@@ -79,7 +79,7 @@ body {
     border-radius: 16px;
 }
 
-	#mask-layer, #trail-drawing {
+	#user-drawing, #trail-drawing {
 	    position: absolute;
 	    top: 0;
 	    left: 0;
@@ -87,10 +87,8 @@ body {
 	    height: 400px;
 	}
 
-	#mask-layer {
-		display: none;
-		overflow: hidden;
-		z-index: 100;
+	#user-drawing {
+		z-index: -100;
 		opacity: 0.2;
 		background: #999;
 	}

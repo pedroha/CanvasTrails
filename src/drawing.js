@@ -26,6 +26,8 @@ BrushStyle.prototype = {
 
 
 window.onload = function() {
+    var userCanvas = document.getElementById("user-drawing");
+	var userContext = userCanvas.getContext("2d");
     
     var trailCanvas = document.getElementById("trail-drawing");
 	var trailContext = trailCanvas.getContext("2d");
@@ -118,9 +120,9 @@ window.onload = function() {
 
     	self.replay = function(context) {
 
-    		var layer = document.getElementById('mask-layer');
+    		var layer = document.getElementById('user-drawing');
 
-    		layer.style.display = 'block'; // Block drawing!
+//    		layer.style.display = 'block'; // Block drawing!
 
     		//log('Layer blocking: ' + layer.style.zIndex);
 
@@ -138,12 +140,13 @@ window.onload = function() {
 	    			}, p.time);
     			})(i);
     		}
-    		
+    		/*
 			// Restore user control
 			var p = self.pieces[self.pieces.length-1];
     		setTimeout(function() {
 				layer.style.display = 'none';
     		}, p.time + 10);
+			*/
     	}
     }
 
@@ -156,6 +159,19 @@ window.onload = function() {
     }
 
     //--------------------
+
+    function clearReplayStrokes(c, strokeCollection) {
+    	// Clear all the canvas and replay stroke
+    	c.beginPath();
+    	c.rect(0, 0, 600, 400);
+    	c.fillStyle = "white";
+    	c.fill();
+
+    	for (var i=0; i<strokeCollection.length; i++) {
+    		var s = strokeCollection[i];
+    		s.replay(trailContext);
+    	}
+    }
 
     var paintCanvas = (function(canvas, context) {
     	var c = context;
@@ -180,18 +196,7 @@ window.onload = function() {
 	        strokeEnd: function() {
 	        	strokeCollection.push(stroke);
 
-	        	// Clear all the canvas and replay stroke
-	        	c.beginPath();
-	        	c.rect(0, 0, 600, 400);
-	        	c.fillStyle = "white";
-	        	c.fill();
-
-	        	paletteControl.reapplyStyle();
-
-	        	for (var i=0; i<strokeCollection.length; i++) {
-	        		var s = strokeCollection[i];
-	        		s.replay(trailContext);
-	        	}
+	        	clearReplayStrokes(c, strokeCollection);
 	        }
 	    };
 
