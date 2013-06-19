@@ -8,6 +8,13 @@
     <link rel="stylesheet" href="drawing.css" />
 	<!--[if lt IE 9]><script type="text/javascript" src="excanvas.js"></script><![endif]-->
     <style>
+
+        #user-drawing {
+            z-index: 100;
+            opacity: 1.0;
+            background: transparent;
+        }
+
     </style>
 </head>
 <body>
@@ -23,7 +30,7 @@
         </div>
 
         <div id="trail-container">
-            <canvas id="user-drawing" class="drawing"></canvas>
+            <canvas id="user-drawing" class="drawing"  width="600" height="400">No CANVAS support!!</canvas>
             <canvas id="trail-drawing" class="drawing" width="600" height="400">No CANVAS support!!</canvas>
         </div>
 
@@ -31,8 +38,12 @@
     	
 	</div>
 
-    <script src="jquery.js"></script>
-    <script src="drawing.js"></script>
+    <script src="js/jquery.js"></script>
+    <script src="js/StrokeModel.js"></script>
+    <script src="js/PaletteControl.js"></script>
+    <script src="js/StrokeRecorder.js"></script>
+    <script src="js/StrokePainter.js"></script>
+    <script src="js/App.js"></script>
 
 </body>
 </html>
