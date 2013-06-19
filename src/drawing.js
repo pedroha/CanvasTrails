@@ -81,9 +81,12 @@ window.onload = function() {
 	    	init: function(ctx) {
 	    		context = ctx;
 				currentBrushStyle.applyStyle(context);
-	    	},
-	    	reapplyStyle: function() {
+	    	}
+	    	, reapplyStyle: function() {
 				currentBrushStyle.applyStyle(context);
+	    	}
+	    	, getCurrentBrush: function() {
+	    		return currentBrushStyle;
 	    	}
 	    };
     })();
@@ -121,7 +124,7 @@ window.onload = function() {
 
 	    			setTimeout(function() {		
 						var prev = self.pieces[iter-1];
-
+						p.state.applyStyle(context);
 						context.beginPath();
 						context.moveTo(prev.x, prev.y);
 	    				context.lineTo(p.x, p.y);
@@ -158,24 +161,23 @@ window.onload = function() {
 	            c.lineTo(x, y);
 	            c.stroke();
 
-	            stroke.add(x, y);
+	            var state = paletteControl.getCurrentBrush();
+	            stroke.add(x, y, state);
 	        },
 	        strokeEnd: function() {
 	        	strokeCollection.push(stroke);
 
-	        	for (var j = 0; j < 5; j++) {        		
-		        	// Clear all the canvas and replay stroke
-		        	c.beginPath();
-		        	c.rect(0, 0, 600, 400);
-		        	c.fillStyle = "white";
-		        	c.fill();
+	        	// Clear all the canvas and replay stroke
+	        	c.beginPath();
+	        	c.rect(0, 0, 600, 400);
+	        	c.fillStyle = "white";
+	        	c.fill();
 
-		        	paletteControl.reapplyStyle();
+	        	paletteControl.reapplyStyle();
 
-		        	for (var i=0; i<strokeCollection.length; i++) {
-		        		var s = strokeCollection[i];
-		        		s.replay(context);
-		        	}
+	        	for (var i=0; i<strokeCollection.length; i++) {
+	        		var s = strokeCollection[i];
+	        		s.replay(context);
 	        	}
 	        }
 	    };
