@@ -27,7 +27,7 @@ BrushStyle.prototype = {
 
 window.onload = function() {
     
-    var canvas = document.getElementById("canvas");
+    var canvas = document.getElementById("trail-drawing");
 	var context = canvas.getContext("2d");
 
     // --- Palette -----

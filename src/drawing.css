@@ -14,6 +14,7 @@ body {
 
 .color-container {
     margin: auto;
+    height: 100px;
 }
 
 .color-panel {
@@ -67,6 +68,15 @@ body {
     border: solid 10px #a03;
 }
 
+#trail-container {
+    position: relative;
+}
+
+#user-control, #trail-drawing {
+    position: absolute;
+    top: 0;
+    left: 0;
+}
 
 .drawing {
     margin-top: 20px;
