@@ -18,8 +18,8 @@
 
 	// alert("onload");
 
-	strokeModel.on("stroke-added", function clearReplayStrokes(evt) {
-		var strokes = evt.data;
+	strokeModel.on("stroke-added", function clearReplayStrokes(strokes) {
+		//var strokes = evt.data;
 		strokeRecorder.clearScreen();
 		strokePlayer.paint(strokes);
 	});
