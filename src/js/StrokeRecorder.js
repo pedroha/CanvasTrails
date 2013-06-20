@@ -48,32 +48,90 @@ StrokeRecorder.prototype.clearScreen = function() {
 	this.userCanvas.width = w; // Reset the whole canvas!
 
 	// Reset last state
+    var c = this.userCanvas;
     var brush = paletteControl.getCurrentBrush();
-    brush.applyStyle(userCanvas.getContext('2d'));
+    brush.applyStyle(c.getContext('2d'));
 };
 
 StrokeRecorder.prototype.init = function() {
 	var self = this;
 	var canvas = self.userCanvas;
     var drawing = false;
+    var touchId = 0;
 
-    canvas.onmousedown = function(event) {
-    	var p = getMousePos(event);
-        self.brush.startStroke(p.x, p.y);
+    var startStroke = function(x, y) {
         drawing = true;
+
+        var b = self.brush;
+        b.startStroke(x, y);
+        b.stroke(x+1, y+1); // Trick to draw a dot
     };
 
-    canvas.onmousemove = function(event) {
-    	var p = getMousePos(event);
+    var stroke = function(x, y) {
         if (drawing) {
-            self.brush.stroke(p.x, p.y);
+            self.brush.stroke(x, y);
         }
     };
 
-    canvas.onmouseup = function(event) {
-        drawing = false;
+    var strokeEnd = function() {
         self.brush.strokeEnd();
-	};
+        drawing = false;
+    };
+
+    var strokeCancel = function() {
+        move = drawing = false;
+        self.brush.cancelStroke();
+    }
+
+    canvas.onmousedown = function(event) {
+        var p = getMousePos(event);
+        startStroke(p.x, p.y);
+    };
+    canvas.onmousemove = function(event) {
+        var p = getMousePos(event);
+        stroke(p.x, p.y);
+    };
+    canvas.onmouseup = function(event) {
+        strokeEnd();
+    };
+
+    canvas.touchstart = function(event) {
+        event.preventDefault();
+
+        var touches = event.changedTouches;
+        if (touches.length > 0) {
+            var touch = touches[0]; // Just pick the first touch
+            touchId = touch.identifier;
+            var p = {x: touch.pageX, y: touch.pageY};
+            startStroke(p.x, p.y);
+        }
+    };
+
+    canvas.touchmove = function(event) {
+        event.preventDefault();
+
+        var touches = event.changedTouches;
+        if (touches.length > 0) {
+            for (var t = 0; t < touches.length; t++) {
+                var touch = touches[t];
+                if (touch.identifier === touchId) {
+                    var p = {x: touch.pageX, y: touch.pageY};
+                    stroke(p.x, p.y);                    
+                }
+            }
+        }
+    };
+
+    canvas.touchend = function(event) {
+        strokeEnd();
+    };
+
+    canvas.touchcancel = function(event) {
+    };
+
+    canvas.touchleave = function(event) {
+    };
+
 
 	// With jquery, we can get rid of a lot of this "boilerplate" code
 

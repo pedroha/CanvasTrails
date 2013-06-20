@@ -25,6 +25,11 @@
 		//console.log("StrokeModel.strokeEnd");
 	};
 
+	StrokeModel.prototype.cancelStroke = function() {
+		this.strokes.pop();
+		this.currentStroke = null;
+	}
+
 //	environment.StrokeModel = StrokeModel;
 //})(this);
 

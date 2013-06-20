@@ -1,0 +1,36 @@
+---
+Multitouch
+
+Great intro tutorial
+https://developer.mozilla.org/en-US/docs/Web/Guide/DOM/Events/Touch_events
+
+Support for gestures in Android/iPhone
+http://backtothecode.blogspot.com/2009/10/javascript-touch-and-gesture-events.html
+
+Support for MSPointer in Windows 8
+var touchEnabled = window.navigator.msPointerEnabled
+http://jessefreeman.com/articles/from-webkit-to-windows-8-touch-events/
+
+Comprehensive gesture library (dragstart, etc). Supports Windows 8 MSPointer!
+https://github.com/EightMedia/hammer.js/wiki/Getting-Started
+
+Comparison of libs
+http://www.queness.com/post/11755/11-multi-touch-and-touch-events-javascript-libraries
+
+Pretty comprehensive: 1 to 12 fingers (and tons of gestures: shake included)
+* And supports MSPointer!
+https://github.com/mudcube/Event.js
+
+INERTIAL Scroller demo (nice iphone feeling)
+http://zynga.github.io/scroller/demo/canvas.html
+
+---
+
+1) Direct support for touch events using MDN. Later look into using MS Pointer and other support)
+
+---
+
+WebRTC multi-video chat
+
+https://github.com/webRTC
+

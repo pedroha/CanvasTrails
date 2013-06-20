@@ -18,6 +18,23 @@ b) Adding a masking layer but still it doesn't work perfectly: user can still pa
    Done: re-architecture (v1)
 
 -----------------------
+
+NOW
+
+2.5) Add support for touch events using:
+https://developer.mozilla.org/en-US/docs/Web/Guide/DOM/Events/Touch_events
+
+	* Test in ipad, iphone devices
+
+Later, which one to use?
+https://github.com/EightMedia/hammer.js
+https://github.com/mudcube/Event.js
+
+
+First touch: no drawing (should we add a DOT? Yeah)
+
+
+-----------------------
 TODO
 
 3) Color palette: brush colors
