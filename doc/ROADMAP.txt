@@ -24,7 +24,7 @@ TODO
    https://kuler.adobe.com/explore/
    Exercise on jquery selector and output to console for each match.
 
-4) HTML page redesign (mobile friendly)
+4) HTML page redesign (mobile friendly), ipad-friendly
 
 -----------------------
 Major features
