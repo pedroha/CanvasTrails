@@ -127,9 +127,11 @@ StrokeRecorder.prototype.init = function() {
     };
 
     canvas.touchcancel = function(event) {
+        strokeCancel();
     };
 
     canvas.touchleave = function(event) {
+        strokeCancel();
     };
 
 
