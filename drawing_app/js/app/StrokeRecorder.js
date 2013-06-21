@@ -129,8 +129,8 @@ StrokeRecorder.prototype.init = function() {
         function draw(event){
             // get the touch coordinates
             var coors = {
-                x: event.targetTouches[0].pageX,
-                y: event.targetTouches[0].pageY
+                x: event.targetTouches[0].pageX - r.left - border,
+                y: event.targetTouches[0].pageY - r.top - border
             };
             // pass the coordinates to the appropriate handler
             drawer[event.type](coors);
