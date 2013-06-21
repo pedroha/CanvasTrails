@@ -38,7 +38,7 @@
 
 function BrushStyle(color, width) {
     this.color = color;
-    this.width = width || 25;
+    this.width = width || 18;
     this.lineCap = "round";
     this.lineJoin = "round";
 }
