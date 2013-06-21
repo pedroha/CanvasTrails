@@ -95,6 +95,22 @@ StrokeRecorder.prototype.init = function() {
         strokeEnd();
     };
 
+    canvas.ontouchstart = function(event) {
+        var p = getMousePos(event);
+        startStroke(p.x, p.y);
+    };
+
+    canvas.ontouchmove = function(event) {
+        var p = getMousePos(event);
+        stroke(p.x, p.y);
+    };
+
+    canvas.ontouchend = function(event) {
+        strokeEnd();
+    };
+
+    /*
+
     if (true) {
         var context = canvas.getContext('2d');
 
@@ -123,7 +139,7 @@ StrokeRecorder.prototype.init = function() {
         var border = getBorderSize(); // Initialized just one time
         var r = canvas.getBoundingClientRect();
 
-        alert(JSON.stringify(r));
+        // alert(JSON.stringify(r));
 
         // create a function to pass touch events and coordinates to drawer
         function draw(event){
@@ -147,6 +163,7 @@ StrokeRecorder.prototype.init = function() {
             event.preventDefault();
         },false);   // end body.onTouchMove
     }
+    */
 
 /*
     canvas.touchstart = function(event) {
@@ -210,16 +227,24 @@ StrokeRecorder.prototype.init = function() {
 	}
 	
 	var border = getBorderSize(); // Initialized just one time
-    
 
 	function getMousePos(event) {
     	if (!event) { event = window.event; } // This is for IE's global window.event
-    	
-	    var r = canvas.getBoundingClientRect();
-    	var coords = {
-    		x : event.clientX - r.left - border,
-    		y : event.clientY - r.top - border
-    	};
+
+        var r = canvas.getBoundingClientRect();
+
+        if (event.targetTouches) {
+            var coors = {
+                x: event.targetTouches[0].pageX - r.left - border,
+                y: event.targetTouches[0].pageY - r.top - border
+            };
+        }
+        else {
+            var coords = {
+                x : event.clientX - r.left - border,
+                y : event.clientY - r.top - border
+            };
+        }
     	return coords;
     }
 };
