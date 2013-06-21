@@ -9,24 +9,24 @@ body {
 
 .page {
     margin: 0 auto; /* align: for the rest */ 
-    width: 700px;
+    width: 620px;
 }
 
 .color-container {
     margin: auto;
-    height: 100px;
+    height: 140px;
 }
 
 .color-panel {
     background-color: #486D57;
-    width: 90px;
-    height: 45px;
+    width: 74px;
+    height: 74px;
     padding: 5px;
     margin: 10px;
     border: solid 10px #ccc;
-    -webkit-border-radius: 10px;
-    -moz-border-radius: 10px;
-    border-radius: 10px;
+    -webkit-border-radius: 74px;
+    -moz-border-radius: 74px;
+    border-radius: 74px;
     float: left;
 /*
 	-webkit-transition: background-color .7s ease, width .7s ease, -webkit-border-radius .7s ease, margin-left .7s ease, padding-right .7s ease;
@@ -91,8 +91,8 @@ body {
 	    position: absolute;
 	    top: 0;
 	    left: 0;
-	    width: 700px;
-	    height: 500px;
+	    width: 600px;
+	    height: 400px;
 	}
 
 	#log {
