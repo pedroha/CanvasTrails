@@ -1,0 +1,135 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, user-scalable=no,initial-scale = 1.0">
+<link rel="apple-touch-icon" href="touch-icon-iphone.png" />
+<link rel="apple-touch-icon" sizes="72x72" href="touch-icon-ipad.png" />
+<link rel="apple-touch-icon" sizes="114x114" href="touch-icon-iphone4.png" />
+<link rel="apple-touch-startup-image" href="startup-iphone.png">
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+<title>Untitled Document</title>
+<style type="text/css">
+body {background:#ccc; margin:0; padding:0}
+html {margin:0; padding:0;}
+#container { position: relative; margin:0; padding:0px; }
+#canvas { border: 1px solid #000; background-color:#FFF; position:relative; width:298px; margin-left:11px; margin-top:5px; }
+</style>
+</head>
+
+<body onload="listen()">
+<div id="container">
+    <canvas id="canvas" width="298" height="298">
+    </canvas><br/>
+    <button onclick="clearImage()">Clear</button>
+    </div>
+</body>
+<script type="text/javascript">
+var canvas = document.getElementById('canvas');
+if(canvas){var context= canvas.getContext('2d');}
+var tool;
+tool = new tool_pencil();
+
+document.body.addEventListener('touchmove',function(event){ event.preventDefault(); },false);
+function listen(){
+    canvas = document.getElementById('canvas'); 
+    if(canvas){
+        context= canvas.getContext('2d');
+        context.fillStyle = "rgb(255,255,255)";  
+        context.fillRect(0, 0, canvas.width, canvas.height);
+        iphone = ((window.navigator.userAgent.match('iPhone'))||(window.navigator.userAgent.match('iPod')))?true:false;
+        ipad = (window.navigator.userAgent.match('iPad'))?true:false;
+        if(iphone||ipad){
+            canvas.addEventListener('touchstart', ev_canvas, false);
+            canvas.addEventListener('touchend', ev_canvas, false);
+            canvas.addEventListener('touchmove', ev_canvas, false);
+        }
+        else{
+            canvas.addEventListener('mousedown', ev_canvas, false);
+            canvas.addEventListener('mousemove', ev_canvas, false);
+            canvas.addEventListener('mouseup',   ev_canvas, false);
+        }
+    }
+}
+
+function tool_pencil () {
+    var tool = this;
+    this.started = false;
+    this.mousedown = function (ev) {
+        context.beginPath();
+        context.moveTo(ev._x, ev._y);
+        tool.started = true;
+    };
+
+    this.mousemove = function (ev) {
+        if (tool.started) {
+            context.lineTo(ev._x, ev._y);
+            context.stroke();
+        }
+    };
+
+    this.mouseup = function (ev) {
+        if (tool.started) {
+            tool.mousemove(ev);
+            tool.started = false;
+            //img_update();
+        }
+    };
+    this.touchstart = function (ev) {
+        ev.preventDefault();
+        context.beginPath();
+        context.moveTo(ev._x, ev._y);
+        tool.started = true;
+    };
+
+    this.touchmove = function (ev) {
+        ev.preventDefault();
+        if (tool.started) {
+            context.lineTo(ev._x, ev._y);
+            context.stroke();
+        }
+    };
+
+    this.touchend = function (ev) {
+        ev.preventDefault();
+        if (tool.started) {
+            tool.started = false;
+        }
+    };
+}
+
+// The general-purpose event handler. This function just determines the mouse position relative to the canvas element.
+function ev_canvas (ev) {
+    iphone = ((window.navigator.userAgent.match('iPhone'))||(window.navigator.userAgent.match('iPod')))?true:false;
+    ipad = (window.navigator.userAgent.match('iPad'))?true:false;
+    if (((iphone)||(ipad))&&(ev.touches[0])){ //iPad
+        ev._x = ev.touches[0].clientX;
+        ev._y = ev.touches[0].clientY;
+    }
+    else if (ev.layerX || ev.layerX == 0) { // Firefox
+        ev._x = ev.layerX;
+        ev._y = ev.layerY;
+    }
+    else if (ev.offsetX || ev.offsetX == 0) { // Opera
+        ev._x = ev.offsetX;
+        ev._y = ev.offsetY;
+    }
+  // Call the event handler of the tool.
+    var func = tool[ev.type];
+    if (func) {
+        func(ev);
+    }
+}
+
+function clearImage(){
+    var yes=confirm('Clear drawing?');
+    if(yes){
+        context.clearRect(0, 0, canvas.width, canvas.height);
+        context.fillStyle = "rgb(255,255,255)";  
+        context.fillRect(0, 0, canvas.width, canvas.height);
+    }
+}
+
+</script>
+</html>
