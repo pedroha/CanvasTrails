@@ -121,14 +121,14 @@ StrokeRecorder.prototype.init = function() {
         };
 
         var border = getBorderSize(); // Initialized just one time
-        alert("Border: " + border);
+        var r = canvas.getBoundingClientRect();
 
         // create a function to pass touch events and coordinates to drawer
         function draw(event){
             // get the touch coordinates
             var coors = {
-                x: event.targetTouches[0].pageX - border,
-                y: event.targetTouches[0].pageY - border
+                x: event.targetTouches[0].pageX - r.left - border,
+                y: event.targetTouches[0].pageY - r.top - border
             };
             // pass the coordinates to the appropriate handler
             drawer[event.type](coors);
