@@ -119,6 +119,10 @@ StrokeRecorder.prototype.init = function() {
                 }
             }
         };
+
+        var border = getBorderSize(); // Initialized just one time
+        alert("Border: " + border);
+
         // create a function to pass touch events and coordinates to drawer
         function draw(event){
             // get the touch coordinates
@@ -141,10 +145,6 @@ StrokeRecorder.prototype.init = function() {
             event.preventDefault();
         },false);   // end body.onTouchMove
     }
-
-    alert("StrokeRecorder");
-
-
 
 /*
     canvas.touchstart = function(event) {
@@ -209,6 +209,7 @@ StrokeRecorder.prototype.init = function() {
 	
 	var border = getBorderSize(); // Initialized just one time
     
+
 	function getMousePos(event) {
     	if (!event) { event = window.event; } // This is for IE's global window.event
     	
