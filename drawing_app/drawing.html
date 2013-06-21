@@ -5,6 +5,22 @@
 	<meta charset="utf-8">
 	<title>draw</title>
 
+
+    <!-- Mobile specific code -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="stylesheet" media="handheld, only screen and (max-device-width: 320px)" href="phone.css">
+    <link rel="stylesheet" media="only screen and (min-width: 641px) and (max-width: 800px)" href="ipad.css">
+
+    <script>
+
+        // Prevent iOS default scrolling
+        document.body.addEventListener('touchmove', function(event) {
+          event.preventDefault();
+        }, false); 
+
+    </script>
     <link rel="stylesheet" href="css/drawing.css" />
 	<!--[if lt IE 9]><script type="text/javascript" src="excanvas.js"></script><![endif]-->
     <style>
