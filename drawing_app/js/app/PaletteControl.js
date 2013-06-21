@@ -3,8 +3,16 @@
 var paletteControl = (function() {
 	var context;
 
-    // Stsee colors
-    var palette = ['B04141', '85224A', 'EBE3B2', '1A4F6B', '042B4F'];
+    // cocurious
+    //var palette = ["8B3D2B","D45C22","F7CD44","1E5A56","AFE6D4"];
+
+    // iOS 7
+    //var palette = ["2267F2","1BDDF2","3FBF04","F28705","F24738"];
+
+
+    var lucky = Math.floor(Math.random() * PaletteColors.length);
+    console.log(PaletteColors[lucky]);
+    var palette = PaletteColors[lucky].colors;
     
     var brushStyles = [];
 
