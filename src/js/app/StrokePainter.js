@@ -6,11 +6,12 @@ function StrokePlayer(trailCanvas) {
 }
 
 StrokePlayer.prototype.paint = function(strokes) {
-	var c = this.trailCanvas.getContext('2d');
+	var cnv = this.trailCanvas;
+	var c = cnv.getContext('2d');
 
 	// Clear all the canvas and replay stroke
 	c.beginPath();
-	c.rect(0, 0, 600, 400);
+	c.rect(0, 0, cnv.width, cnv.height);
 	c.fillStyle = "white";
 	c.fill();
 

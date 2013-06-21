@@ -19,7 +19,7 @@ b) Adding a masking layer but still it doesn't work perfectly: user can still pa
 
 -----------------------
 
-NOW
+TODAY (June 20)
 
 2.5) Add support for touch events using:
 https://developer.mozilla.org/en-US/docs/Web/Guide/DOM/Events/Touch_events
@@ -30,9 +30,9 @@ Later, which one to use?
 https://github.com/EightMedia/hammer.js
 https://github.com/mudcube/Event.js
 
-
 First touch: no drawing (should we add a DOT? Yeah)
 
+EventEmitter: minor improvements
 
 -----------------------
 TODO

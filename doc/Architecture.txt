@@ -16,9 +16,14 @@ StrokePlayer: plays a collection of strokes in parallel
 		StrokePlayer.play(strokes);
 	});
 
-Input: StrokeRecorder (UserCanvas: user interactions)
-Output: StrokePlayer (TrailCanvas: for replaying the trail animation)
+Input: StrokeRecorder (UserCanvas layer: user interactions)
+Output: StrokePlayer (TrailCanvas layer: for replaying the trail animation)
 
+Architectural decisions
+-----------------------
+
+ * Two Canvas layers
+   We want to have two Canvas layers (i.e. UserCanvas and TrailCanvas), so that user input doesn't conflict with the animated drawing. (Don't want to share the same drawing context)
 
 If while animating, there's more input (user drawing)
 	-> queue the request until the animation is done and replay!
