@@ -129,7 +129,8 @@ StrokeRecorder.prototype.init = function() {
             // pass the coordinates to the appropriate handler
             drawer[event.type](coors);
         }
-        
+
+
         // attach the touchstart, touchmove, touchend event listeners.
         canvas.addEventListener('touchstart',draw, false);
         canvas.addEventListener('touchmove',draw, false);
@@ -140,6 +141,8 @@ StrokeRecorder.prototype.init = function() {
             event.preventDefault();
         },false);   // end body.onTouchMove
     }
+
+    alert("StrokeRecorder");
 
 
 
