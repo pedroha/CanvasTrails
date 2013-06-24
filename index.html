@@ -6,6 +6,12 @@
     <meta http-equiv="X-UA-Compatible" content="chrome=1" />
     <meta name="description" content="Canvastrails : Painting, coloring application using animated strokes on HTML5 canvas" />
 
+    <!-- Mobile specific code -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+
     <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
 
     <title>Canvas Trails</title>
@@ -70,6 +76,21 @@
     <script src="drawing_app/js/app/StrokeRecorder.js"></script>
     <script src="drawing_app/js/app/StrokePainter.js"></script>
     <script src="drawing_app/js/app/App.js"></script>
+
+    <script src="js/lib/fastclick.js"></script>
+
+    <script>
+        // Prevent iOS default scrolling
+        document.body.addEventListener('touchmove', function(event) {
+          event.preventDefault();
+        }, false);
+
+        // Fast click
+        window.addEventListener('load', function() {
+            FastClick.attach(document.body);
+        }, false);
+
+    </script>
 
 <!--
 
