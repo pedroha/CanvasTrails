@@ -43,14 +43,6 @@
     	
 	</div>
 
-    <script>
-        // Prevent iOS default scrolling
-        document.body.addEventListener('touchmove', function(event) {
-          event.preventDefault();
-        }, false); 
-
-    </script>
-
     <!-- script src="js/lib/jquery.js"></script  Only needed for logging to #log-->
     <script src="js/lib/util.js"></script>
     <script src="js/app/StrokeModel.js"></script>
@@ -59,6 +51,21 @@
     <script src="js/app/StrokeRecorder.js"></script>
     <script src="js/app/StrokePainter.js"></script>
     <script src="js/app/App.js"></script>
+
+    <script src="js/lib/fastclick.js"></script>
+
+    <script>
+        // Prevent iOS default scrolling
+        document.body.addEventListener('touchmove', function(event) {
+          event.preventDefault();
+        }, false);
+
+        // Fast click
+        window.addEventListener('load', function() {
+            FastClick.attach(document.body);
+        }, false);
+
+    </script>
 
 </body>
 </html>
