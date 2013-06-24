@@ -18,13 +18,9 @@
 
 	// alert("onload");
 
-	var clearReplayStrokes = function(strokes) {
+	strokeModel.on("stroke-added", function clearReplayStrokes(strokes) {
+		//var strokes = evt.data;
 		strokeRecorder.clearScreen();
 		strokePlayer.paint(strokes);
-	};
-
-	strokeModel.on("stroke-added", function(data) {
-		clearReplayStrokes(strokeModel.strokes);
 	});
-
 //}

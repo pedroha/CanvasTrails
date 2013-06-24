@@ -35,14 +35,13 @@ var paletteControl = (function() {
 
         elt.onclick = (function(iter) {
             var result = function(e) {
+                // alert('got ' + iter);
                 currentBrushStyle = brushStyles[iter];
 
                 if (!context) {
                 	alert("Missing context");
                 }
-                else {
-                    currentBrushStyle.applyStyle(context);
-                }
+                currentBrushStyle.applyStyle(context);
                 
                 // Unselect all
                 for (var j = 0; j < colorElts.length; j++) {
