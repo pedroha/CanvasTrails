@@ -44,13 +44,14 @@ StrokeRecorder.prototype.setStrokeModel = function(m) {
 };
 
 StrokeRecorder.prototype.clearScreen = function() {
-	var w = this.userCanvas.width;
-	this.userCanvas.width = w; // Reset the whole canvas!
+    var cnv = this.userCanvas;
+    var c = cnv.getContext('2d')
 
-	// Reset last state
-    var c = this.userCanvas;
+    cnv.width = cnv.width; // Reset the whole canvas
+
+    // Reset last state
     var brush = paletteControl.getCurrentBrush();
-    brush.applyStyle(c.getContext('2d'));
+    brush.applyStyle(c);
 };
 
 StrokeRecorder.prototype.init = function() {
@@ -84,17 +85,85 @@ StrokeRecorder.prototype.init = function() {
     }
 
     canvas.onmousedown = function(event) {
-        var p = getMousePos(event);
+        var p = getCursorPos(event);
         startStroke(p.x, p.y);
     };
     canvas.onmousemove = function(event) {
-        var p = getMousePos(event);
+        var p = getCursorPos(event);
         stroke(p.x, p.y);
     };
     canvas.onmouseup = function(event) {
         strokeEnd();
     };
 
+    if (0) {    
+        canvas.ontouchstart = function(event) {
+            var p = getCursorPos(event);
+            startStroke(p.x, p.y);
+        };
+
+        canvas.ontouchmove = function(event) {
+            var p = getCursorPos(event);
+            stroke(p.x, p.y);
+        };
+
+        canvas.ontouchend = function(event) {
+            strokeEnd();
+        };
+    }
+    
+
+    if (true) {
+        var context = canvas.getContext('2d');
+
+        // create a drawer which tracks touch movements
+        var drawer = {
+            isDrawing: false,
+            touchstart: function(coors) {
+                startStroke(coors.x, coors.y);
+            },
+            touchmove: function(coors) {
+                stroke(coors.x, coors.y);
+            },
+            touchend: function(coors){
+                strokeEnd();
+            }
+        };
+
+        var border = getBorderSize(); // Initialized just one time
+        var r = canvas.getBoundingClientRect();
+
+        // alert(JSON.stringify(r));
+
+        // create a function to pass touch events and coordinates to drawer
+        function draw(event) {
+            //var coors = getCursorPos(event);
+            //drawer[event.type](coors);
+
+            var coors = null;
+
+            if (event.targetTouches && event.targetTouches[0]) {            
+                // get the touch coordinates
+                coors = {
+                    x: event.targetTouches[0].pageX - r.left - border,
+                    y: event.targetTouches[0].pageY - r.top - border
+                };
+            }
+            // pass the coordinates to the appropriate handler
+            drawer[event.type](coors);
+        }
+
+        // attach the touchstart, touchmove, touchend event listeners.
+        canvas.addEventListener('touchstart',draw, false);
+        canvas.addEventListener('touchmove',draw, false);
+        canvas.addEventListener('touchend',draw, false);
+        
+        // prevent elastic scrolling
+        document.body.addEventListener('touchmove',function(event){
+            event.preventDefault();
+        },false);   // end body.onTouchMove
+    }
+/*
     canvas.touchstart = function(event) {
         event.preventDefault();
 
@@ -133,7 +202,7 @@ StrokeRecorder.prototype.init = function() {
     canvas.touchleave = function(event) {
         strokeCancel();
     };
-
+*/
 
 	// With jquery, we can get rid of a lot of this "boilerplate" code
 
@@ -156,15 +225,28 @@ StrokeRecorder.prototype.init = function() {
 	}
 	
 	var border = getBorderSize(); // Initialized just one time
-    
-	function getMousePos(event) {
+
+	function getCursorPos(event) {
     	if (!event) { event = window.event; } // This is for IE's global window.event
-    	
-	    var r = canvas.getBoundingClientRect();
-    	var coords = {
-    		x : event.clientX - r.left - border,
-    		y : event.clientY - r.top - border
-    	};
+
+        var r = canvas.getBoundingClientRect();
+
+        var coors = null;
+
+        if (event.targetTouches) {
+            if (event.targetTouches[0]) {
+                coors = {
+                    x: event.targetTouches[0].pageX - r.left - border,
+                    y: event.targetTouches[0].pageY - r.top - border
+                };
+            }
+        }
+        else {
+            coords = {
+                x : event.clientX - r.left - border,
+                y : event.clientY - r.top - border
+            };
+        }
     	return coords;
     }
 };
