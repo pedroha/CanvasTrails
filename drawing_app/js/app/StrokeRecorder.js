@@ -67,8 +67,8 @@ StrokeRecorder.prototype.init = function() {
             var r = canvas.getBoundingClientRect();
             // get the touch coordinates
             coors = {
-                x: event.targetTouches[0].pageX - r.left - border,
-                y: event.targetTouches[0].pageY - r.top - border
+                x: event.targetTouches[0].pageX - r.left - border - window.scrollX,
+                y: event.targetTouches[0].pageY - r.top - border - window.scrollY
             };
         }
         return coors;
