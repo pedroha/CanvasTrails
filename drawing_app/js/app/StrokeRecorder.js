@@ -1,14 +1,17 @@
+/*
+ *  StrokeRecorder
+ */
+
 var StrokeRecorder = function(userCanvas, paletteControl) {
+    var self = this;
+
 	if (!userCanvas) {
 		throw new Error("StrokeRecorder(): Missing userCanvas param");
 	}
 	if (!paletteControl) {
 		throw new Error("StrokeRecorder(): Missing paletteControl param");
 	}
-
-	var self = this;
-
-	this.userCanvas = userCanvas;
+    this.userCanvas = userCanvas;
 
 	var c = userCanvas.getContext('2d');
 
@@ -17,7 +20,6 @@ var StrokeRecorder = function(userCanvas, paletteControl) {
         	if (!self.strokeModel) {
         		throw new Error("StrokeRecorder: forgot to setStrokeModel(m)!");
         	}
-        	0 && console.log("brush.startStroke()");
             c.beginPath();
             c.moveTo(x, y);
 
@@ -25,7 +27,6 @@ var StrokeRecorder = function(userCanvas, paletteControl) {
             self.strokeModel.startStroke(x, y, brush);
 	    },
         stroke: function(x, y) {
-        	0 && console.log("brush.stroke()");
             c.lineTo(x, y);
             c.stroke();
 
@@ -33,7 +34,6 @@ var StrokeRecorder = function(userCanvas, paletteControl) {
             self.strokeModel.stroke(x, y, brush);
         },
         strokeEnd: function() {
-        	0 && console.log("brush.strokeEnd()");
         	self.strokeModel.strokeEnd();
         }
     };
@@ -57,196 +57,105 @@ StrokeRecorder.prototype.clearScreen = function() {
 StrokeRecorder.prototype.init = function() {
 	var self = this;
 	var canvas = self.userCanvas;
-    var drawing = false;
-    var touchId = 0;
+    var border = getCanvasBorderSize(canvas); // Initialized just one time
+    var brush = self.brush;
 
-    var startStroke = function(x, y) {
-        drawing = true;
-
-        var b = self.brush;
-        b.startStroke(x, y);
-        b.stroke(x+1, y+1); // Trick to draw a dot
-    };
-
-    var stroke = function(x, y) {
-        if (drawing) {
-            self.brush.stroke(x, y);
-        }
-    };
-
-    var strokeEnd = function() {
-        self.brush.strokeEnd();
-        drawing = false;
-    };
-
-    var strokeCancel = function() {
-        move = drawing = false;
-        self.brush.cancelStroke();
-    }
-
-    canvas.onmousedown = function(event) {
-        var p = getCursorPos(event);
-        startStroke(p.x, p.y);
-    };
-    canvas.onmousemove = function(event) {
-        var p = getCursorPos(event);
-        stroke(p.x, p.y);
-    };
-    canvas.onmouseup = function(event) {
-        strokeEnd();
-    };
-
-    if (0) {    
-        canvas.ontouchstart = function(event) {
-            var p = getCursorPos(event);
-            startStroke(p.x, p.y);
-        };
-
-        canvas.ontouchmove = function(event) {
-            var p = getCursorPos(event);
-            stroke(p.x, p.y);
-        };
-
-        canvas.ontouchend = function(event) {
-            strokeEnd();
-        };
-    }
-    
-
-    if (true) {
-        var context = canvas.getContext('2d');
-
-        // create a drawer which tracks touch movements
-        var drawer = {
-            isDrawing: false,
-            touchstart: function(coors) {
-                startStroke(coors.x, coors.y);
-            },
-            touchmove: function(coors) {
-                stroke(coors.x, coors.y);
-            },
-            touchend: function(coors){
-                strokeEnd();
-            }
-        };
-
-        var border = getBorderSize(); // Initialized just one time
-        var r = canvas.getBoundingClientRect();
-
-        // alert(JSON.stringify(r));
-
-        // create a function to pass touch events and coordinates to drawer
-        function draw(event) {
-            //var coors = getCursorPos(event);
-            //drawer[event.type](coors);
-
-            var coors = null;
-
-            if (event.targetTouches && event.targetTouches[0]) {            
-                // get the touch coordinates
-                coors = {
-                    x: event.targetTouches[0].pageX - r.left - border,
-                    y: event.targetTouches[0].pageY - r.top - border
-                };
-            }
-            // pass the coordinates to the appropriate handler
-            drawer[event.type](coors);
-        }
-
-        // attach the touchstart, touchmove, touchend event listeners.
-        canvas.addEventListener('touchstart',draw, false);
-        canvas.addEventListener('touchmove',draw, false);
-        canvas.addEventListener('touchend',draw, false);
-        
-        // prevent elastic scrolling
-        document.body.addEventListener('touchmove',function(event){
-            event.preventDefault();
-        },false);   // end body.onTouchMove
-    }
-/*
-    canvas.touchstart = function(event) {
-        event.preventDefault();
-
-        var touches = event.changedTouches;
-        if (touches.length > 0) {
-            var touch = touches[0]; // Just pick the first touch
-            touchId = touch.identifier;
-            var p = {x: touch.pageX, y: touch.pageY};
-            startStroke(p.x, p.y);
-        }
-    };
-
-    canvas.touchmove = function(event) {
-        event.preventDefault();
-
-        var touches = event.changedTouches;
-        if (touches.length > 0) {
-            for (var t = 0; t < touches.length; t++) {
-                var touch = touches[t];
-                if (touch.identifier === touchId) {
-                    var p = {x: touch.pageX, y: touch.pageY};
-                    stroke(p.x, p.y);                    
-                }
-            }
-        }
-    };
-
-    canvas.touchend = function(event) {
-        strokeEnd();
-    };
-
-    canvas.touchcancel = function(event) {
-        strokeCancel();
-    };
-
-    canvas.touchleave = function(event) {
-        strokeCancel();
-    };
-*/
-
-	// With jquery, we can get rid of a lot of this "boilerplate" code
-
-	function getBorderSize() {
-    	var borderLeftPx = undefined;
-
-    	if (window.getComputedStyle) {
-    	    var cssStyle = window.getComputedStyle(canvas, null);
-    	    borderLeftPx = cssStyle.getPropertyValue('border-left-width');
-    	}
-    	else if (canvas.currentStyle) {
-            borderLeftPx = canvas.currentStyle.borderLeftWidth;
-    	} else if (canvas.style) {
-    	    borderLeftPx = canvas.style['border-left-width'];
-    	}
-		// alert("BorderLeftPx: " + borderLeftPx);
-
-        var border = (borderLeftPx) ? parseInt(borderLeftPx, 10) : 16;    	    
-	    return border;
-	}
-	
-	var border = getBorderSize(); // Initialized just one time
-
-	function getCursorPos(event) {
-    	if (!event) { event = window.event; } // This is for IE's global window.event
-
-        var r = canvas.getBoundingClientRect();
-
+    var getTouchPos = function(event) {
         var coors = null;
 
-        if (event.targetTouches) {
-            if (event.targetTouches[0]) {
-                coors = {
-                    x: event.targetTouches[0].pageX - r.left - border,
-                    y: event.targetTouches[0].pageY - r.top - border
-                };
-            }
-        }
-        else {
-            coords = {
-                x : event.clientX - r.left - border,
-                y : event.clientY - r.top - border
+        if (event.targetTouches && event.targetTouches[0]) {
+            var r = canvas.getBoundingClientRect();
+            // get the touch coordinates
+            coors = {
+                x: event.targetTouches[0].pageX - r.left - border,
+                y: event.targetTouches[0].pageY - r.top - border
             };
         }
-    	return coords;
+        return coors;
+    };
+
+    var getMousePos = function(event) {
+        var r = canvas.getBoundingClientRect();
+        var coors = {
+            x : event.clientX - r.left - border,
+            y : event.clientY - r.top - border
+        };
+        return coors;
+    };
+
+    var drawer = {
+        isDrawing: false,
+        startStroke: function(coors) {
+            if (!this.isDrawing) {
+                brush.startStroke(coors.x, coors.y);
+                brush.stroke(coors.x+1, coors.y+1);
+                this.isDrawing = true;
+            }
+        },
+        stroke: function(coors) {
+            if (this.isDrawing) {
+                brush.stroke(coors.x, coors.y);
+            }
+        },
+        strokeEnd: function(coors){
+            if (this.isDrawing) {
+                brush.strokeEnd();
+                this.isDrawing = false;
+            }
+        }
+    };
+
+    var touchdraw = function(event) {
+        var events = {
+            'touchstart': 'startStroke'
+          , 'touchmove' : 'stroke'
+          , 'touchend' : 'strokeEnd'
+        }
+        if (event.type in events) {
+            var coors = getTouchPos(event);
+            var action = events[event.type];
+            drawer[action](coors);
+        }
+    };
+
+    var mousedraw = function(event) {
+        var events = {
+            'mousedown': 'startStroke'
+          , 'mousemove': 'stroke'
+          , 'mouseup': 'strokeEnd'
+        };
+        if (event.type in events) {
+            var coors = getMousePos(event);
+            var action = events[event.type];
+            drawer[action](coors); 
+        }
+    };
+
+    // attach the touchstart, touchmove, touchend event listeners.
+    canvas.addEventListener('touchstart', touchdraw, false);
+    canvas.addEventListener('touchmove', touchdraw, false);
+    canvas.addEventListener('touchend', touchdraw, false);
+
+    canvas.addEventListener('mousedown', mousedraw, false);
+    canvas.addEventListener('mousemove', mousedraw, false);
+    canvas.addEventListener('mouseup', mousedraw, false);
+
+
+    function getCanvasBorderSize(canvas) {
+        var borderLeftPx = undefined;
+
+        if (window.getComputedStyle) {
+            var cssStyle = window.getComputedStyle(canvas, null);
+            borderLeftPx = cssStyle.getPropertyValue('border-left-width');
+        }
+        else if (canvas.currentStyle) {
+            borderLeftPx = canvas.currentStyle.borderLeftWidth;
+        } else if (canvas.style) {
+            borderLeftPx = canvas.style['border-left-width'];
+        }
+        // alert("BorderLeftPx: " + borderLeftPx);
+
+        var border = (borderLeftPx) ? parseInt(borderLeftPx, 10) : 16;          
+        return border;
     }
 };

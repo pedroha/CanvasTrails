@@ -30,7 +30,15 @@ http://zynga.github.io/scroller/demo/canvas.html
 
 ---
 
-WebRTC multi-video chat
+Fast click (due to delay on click for touch devices that want to distinguish tap/double tap events)
 
-https://github.com/webRTC
 
+FT (Financial Times)
+http://labs.ft.com/2011/08/fastclick-native-like-tapping-for-touch-apps/
+https://github.com/ftlabs/fastclick
+
+https://developers.google.com/mobile/articles/fast_buttons
+https://github.com/alexblack/google-fastbutton
+http://x1024.github.io/jquery-fastbutton/
+
+http://maxdegterev.name/javascript-2/fast-buttons-for-webapps/
