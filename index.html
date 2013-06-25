@@ -85,6 +85,11 @@
         //  event.preventDefault();
         //}, false);
 
+	var canvas = document.getElementById('user-canvas');
+        canvas.addEventListener('touchmove', function(event) {
+          event.preventDefault();
+        }, false);
+
         // Fast click
         var is_touch = !!('ontouchstart' in window);
         if (is_touch) {
