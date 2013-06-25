@@ -86,9 +86,12 @@
         //}, false);
 
         // Fast click
-        window.addEventListener('load', function() {
-            FastClick.attach(document.body);
-        }, false);
+        var is_touch = !!('ontouchstart' in window);
+        if (is_touch) {
+		window.addEventListener('load', function() {
+		    FastClick.attach(document.body);
+		}, false);
+        }
 
     </script>
 
