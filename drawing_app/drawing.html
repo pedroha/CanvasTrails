@@ -9,15 +9,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <link rel="stylesheet" media="handheld, only screen and (max-device-width: 320px)" href="phone.css">
-    <link rel="stylesheet" media="only screen and (min-width: 641px) and (max-width: 800px)" href="ipad.css">
 
     <link rel="stylesheet" href="css/drawing.css" />
+    <link rel="stylesheet" media="handheld, only screen and (max-device-width: 480px)" href="css/phone.css">
+    <link rel="stylesheet" media="only screen and (min-width: 641px) and (max-width: 800px)" href="css/ipad.css">
+
 	<!--[if lt IE 9]><script type="text/javascript" src="excanvas.js"></script><![endif]-->
     <style>
 
         #user-drawing {
             z-index: 100;
+        }
+
+        #mobile-trail-container {
+            display: none;
         }
 
     </style>
@@ -35,15 +40,36 @@
         </div>
 
         <div id="trail-container">
-            <canvas id="user-drawing" class="drawing"  width="600" height="400">No CANVAS support!!</canvas>
-            <canvas id="trail-drawing" class="drawing" width="600" height="400">No CANVAS support!!</canvas>
+            <canvas id="user-drawing" class="drawing">No CANVAS support!!</canvas>
+            <canvas id="trail-drawing" class="drawing">No CANVAS support!!</canvas>
         </div>
 
         <div id="log"></log>
     	
 	</div>
 
-    <!-- script src="js/lib/jquery.js"></script  Only needed for logging to #log-->
+    <script type="text/javascript">
+
+        var userCnv = document.getElementById('user-drawing');
+        var trailCnv = document.getElementById('trail-drawing');
+
+        var w = window.innerWidth;
+        var h = window.innerHeight;
+
+        var is_phone = true;
+
+        // For now we only care the phone size (not useful while integrating with github pages and css)
+        if (is_phone) {
+           userCnv.width  = trailCnv.width  = 300;
+           userCnv.height = trailCnv.height = 200;
+        }
+        else {
+           userCnv.width  = trailCnv.width  = 600;
+           userCnv.height = trailCnv.height = 400;
+        }
+    </script>
+
+    <script src="js/lib/zepto.js"></script>
     <script src="js/lib/util.js"></script>
     <script src="js/app/StrokeModel.js"></script>
     <script src="js/app/PaletteColors.js"></script>
@@ -55,15 +81,26 @@
     <script src="js/lib/fastclick.js"></script>
 
     <script>
-        // Prevent iOS default scrolling
-        document.body.addEventListener('touchmove', function(event) {
-          event.preventDefault();
-        }, false);
+        var is_touch = !!('ontouchstart' in window);
+        if (is_touch) {
 
-        // Fast click
-        window.addEventListener('load', function() {
-            FastClick.attach(document.body);
-        }, false);
+            // Fast click
+            window.addEventListener('load', function() {
+                FastClick.attach(document.body);
+            }, false);
+
+            // Prevent iOS default scrolling
+            /*document.body.addEventListener('touchmove', function(event) {
+              event.preventDefault();
+            }, false);
+            */
+
+            // Prevent iOS default scrolling on the canvas
+            var canvas = document.getElementById('user-drawing');
+            canvas.addEventListener('touchmove', function(event) {
+              event.preventDefault();
+            }, false);
+        }
 
     </script>
 

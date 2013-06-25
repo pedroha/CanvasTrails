@@ -40,6 +40,9 @@
 
     <link rel="stylesheet" href="drawing_app/css/drawing.css" />
   <!--[if lt IE 9]><script type="text/javascript" src="excanvas.js"></script><![endif]-->
+    <link rel="stylesheet" media="handheld, only screen and (max-device-width: 480px)" href="drawing_app/css/phone.css">
+    <link rel="stylesheet" media="only screen and (min-width: 641px) and (max-width: 800px)" href="drawing_app/css/ipad.css">
+
     <style>
         
         .page {
@@ -63,12 +66,30 @@
         </div>
 
         <div id="trail-container">
-            <canvas id="user-drawing" class="drawing"  width="600" height="400">No CANVAS support!!</canvas>
-            <canvas id="trail-drawing" class="drawing" width="600" height="400">No CANVAS support!!</canvas>
-        </div>  
+            <canvas id="user-drawing" class="drawing">No CANVAS support!!</canvas>
+            <canvas id="trail-drawing" class="drawing">No CANVAS support!!</canvas>
+        </div>
     </div>
 
-    <!-- script src="js/lib/jquery.js"></script  Only needed for logging to #log-->
+
+    <script type="text/javascript">
+
+        var userCnv = document.getElementById('user-drawing');
+        var trailCnv = document.getElementById('trail-drawing');
+
+        // For now we only care the phone size (not useful while integrating with github pages and css)
+        var is_phone = (window.innerWidth < 590);
+        if (is_phone) {
+           userCnv.width  = trailCnv.width  = 300;
+           userCnv.height = trailCnv.height = 200;
+        }
+        else {
+           userCnv.width  = trailCnv.width  = 600;
+           userCnv.height = trailCnv.height = 400;
+        }
+    </script>
+
+    <script src="drawing_app/js/lib/zepto.js"></script>
     <script src="drawing_app/js/lib/util.js"></script>
     <script src="drawing_app/js/app/StrokeModel.js"></script>
     <script src="drawing_app/js/app/PaletteColors.js"></script>
@@ -82,22 +103,23 @@
     <script>
         var is_touch = !!('ontouchstart' in window);
         if (is_touch) {
-    		// Fast click
-    		window.addEventListener('load', function() {
-    		    FastClick.attach(document.body);
-    		}, false);
+
+            // Fast click
+            window.addEventListener('load', function() {
+                FastClick.attach(document.body);
+            }, false);
 
             // Prevent iOS default scrolling
-    		/*document.body.addEventListener('touchmove', function(event) {
-    		  event.preventDefault();
-    		}, false);
+            /*document.body.addEventListener('touchmove', function(event) {
+              event.preventDefault();
+            }, false);
             */
 
             // Prevent iOS default scrolling on the canvas
-    		var canvas = document.getElementById('user-drawing');
-    		canvas.addEventListener('touchmove', function(event) {
-    		  event.preventDefault();
-    		}, false);
+            var canvas = document.getElementById('user-drawing');
+            canvas.addEventListener('touchmove', function(event) {
+              event.preventDefault();
+            }, false);
         }
 
     </script>

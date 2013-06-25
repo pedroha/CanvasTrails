@@ -1,14 +1,9 @@
 
 //window.onload = function setup() {
-
-
-	var userCanvasName = "user-drawing";
-	var userTrailName = "trail-drawing";
-
-	var userCanvas = document.getElementById(userCanvasName);
+	var userCanvas = document.getElementById("user-drawing");
 	var userContext = userCanvas.getContext("2d");
     
-    var trailCanvas = document.getElementById(userTrailName);
+    var trailCanvas = document.getElementById("trail-drawing");
 	var trailContext = trailCanvas.getContext("2d");
 
 	paletteControl.init(userContext);
