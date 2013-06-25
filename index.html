@@ -82,20 +82,22 @@
     <script>
         var is_touch = !!('ontouchstart' in window);
         if (is_touch) {
-		// Fast click
-		window.addEventListener('load', function() {
-		    FastClick.attach(document.body);
-		}, false);
+    		// Fast click
+    		window.addEventListener('load', function() {
+    		    FastClick.attach(document.body);
+    		}, false);
 
-		// Prevent iOS default scrolling
-		document.body.addEventListener('touchmove', function(event) {
-		  event.preventDefault();
-		}, false);
+            // Prevent iOS default scrolling
+    		/*document.body.addEventListener('touchmove', function(event) {
+    		  event.preventDefault();
+    		}, false);
+            */
 
-		//var canvas = document.getElementById('user-canvas');
-		//canvas.addEventListener('touchmove', function(event) {
-		//  event.preventDefault();
-		//}, false);
+            // Prevent iOS default scrolling on the canvas
+    		var canvas = document.getElementById('user-drawing');
+    		canvas.addEventListener('touchmove', function(event) {
+    		  event.preventDefault();
+    		}, false);
         }
 
     </script>
