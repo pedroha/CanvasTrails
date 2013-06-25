@@ -1,5 +1,5 @@
----
-Multitouch
+MULTITOUCH GESTURES (tap, zoom, pinch, etc)
+===========================================
 
 Great intro tutorial
 https://developer.mozilla.org/en-US/docs/Web/Guide/DOM/Events/Touch_events
@@ -30,6 +30,9 @@ http://zynga.github.io/scroller/demo/canvas.html
 
 ---
 
+FAST CLICK
+==========
+
 Fast click (due to delay on click for touch devices that want to distinguish tap/double tap events)
 
 
@@ -42,3 +45,19 @@ https://github.com/alexblack/google-fastbutton
 http://x1024.github.io/jquery-fastbutton/
 
 http://maxdegterev.name/javascript-2/fast-buttons-for-webapps/
+
+
+
+FULLSCREEN
+==========
+
+Support for mobile devices very poor.
+http://caniuse.com/fullscreen
+http://www.sitepoint.com/html5-full-screen-api/
+
+http://mobile.tutsplus.com/tutorials/mobile-web-apps/remove-address-bar/
+
+	<meta name="apple-mobile-web-app-capable" content="yes" />
+
+Android may have no hope at all.
+
