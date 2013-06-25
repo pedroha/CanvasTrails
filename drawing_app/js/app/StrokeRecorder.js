@@ -131,15 +131,18 @@ StrokeRecorder.prototype.init = function() {
         }
     };
 
-    // attach the touchstart, touchmove, touchend event listeners.
-    canvas.addEventListener('touchstart', touchdraw, false);
-    canvas.addEventListener('touchmove', touchdraw, false);
-    canvas.addEventListener('touchend', touchdraw, false);
-
-    canvas.addEventListener('mousedown', mousedraw, false);
-    canvas.addEventListener('mousemove', mousedraw, false);
-    canvas.addEventListener('mouseup', mousedraw, false);
-
+    var is_touch = !!('ontouchstart' in window);
+    if (is_touch) {
+        // attach the touchstart, touchmove, touchend event listeners.
+        canvas.addEventListener('touchstart', touchdraw, false);
+        canvas.addEventListener('touchmove', touchdraw, false);
+        canvas.addEventListener('touchend', touchdraw, false);
+    }
+    else {
+        canvas.addEventListener('mousedown', mousedraw, false);
+        canvas.addEventListener('mousemove', mousedraw, false);
+        canvas.addEventListener('mouseup', mousedraw, false);        
+    }
 
     function getCanvasBorderSize(canvas) {
         var borderLeftPx = undefined;
