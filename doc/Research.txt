@@ -61,3 +61,18 @@ http://mobile.tutsplus.com/tutorials/mobile-web-apps/remove-address-bar/
 
 Android may have no hope at all.
 
+
+CANVAS PIXEL
+============
+
+http://phoboslab.org/log/2012/09/drawing-pixels-is-hard
+http://www.html5rocks.com/en/tutorials/canvas/hidpi/
+
+http://stackoverflow.com/questions/6023327/does-html5-canvas-pixel-size-depend-on-the-canvas-size
+http://stackoverflow.com/questions/6085299/html5-canvas-units
+http://stackoverflow.com/questions/1664785/html5-canvas-resize-to-fit-window
+
+
+CSS is problematic since it will rescale the canvas.
+Use HTML markup: <canvas width="600" height="400"> or JS.
+

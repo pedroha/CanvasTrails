@@ -1,0 +1,48 @@
+/* i-devices media queries: http://stephen.io/mediaqueries/ */
+
+/* iPhone 5 in portrait and landscape */
+
+@media only screen 
+and (min-device-width : 320px) 
+and (max-device-width : 568px) {
+
+	.color-container {
+		height: 70px;
+	}
+
+	.color-panel {
+		width: 28px;
+		height: 28px;
+		padding: 5px;
+		margin: 4px;
+
+		border: solid 8px #ccc;
+		-webkit-border-radius: 8px;
+		-moz-border-radius: 8px;
+		border-radius: 8px;
+	}
+
+	.drawing {
+	    border: solid #2c7 4px;
+	    -webkit-border-radius: 8px;
+	    -moz-border-radius: 8px;
+	    border-radius: 8px;	    
+	}
+}
+
+/* iPhone 5 in landscape */
+
+@media only screen 
+and (min-device-width : 320px) 
+and (max-device-width : 568px) 
+and (orientation : landscape) { /* STYLES GO HERE */}
+
+/* iPhone 5 in portrait */
+
+@media only screen 
+and (min-device-width : 320px) 
+and (max-device-width : 568px) 
+and (orientation : portrait) { 
+
+}
+
