@@ -1,9 +1,6 @@
 
 //window.onload = function setup() {
 
-	var currentStrokeLayer = 0;
-
-
 	var userCanvasName = "user-drawing";
 	var userTrailName = "trail-drawing";
 
@@ -50,7 +47,9 @@
 
 		strokeCollection = new StrokeCollection();
 		strokeCollection.on("stroke-added", function(data) {
-			clearReplayStrokes(strokeCollection.strokes);
+
+			clearReplayStrokes(this.strokes);
+
 		});
 		strokeRecorder.setStrokeModel(strokeCollection);
 

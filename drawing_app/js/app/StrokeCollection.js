@@ -1,35 +1,34 @@
 // (function(environment) {
 
-	function StrokeCollection() {
-		EventEmitter.apply(this);
-		this.strokes = [];
-		this.currentStroke = null;
-	}
+function StrokeCollection() {
+	EventEmitter.apply(this);
+	this.strokes = [];
+	this.currentStroke = null;
+}
 
-	StrokeCollection.prototype = new EventEmitter();
+StrokeCollection.prototype = new EventEmitter();
 
-	StrokeCollection.prototype.startStroke = function(state) {
-		this.currentStroke = new FullStroke(state.clone());
-		this.strokes.push(this.currentStroke);
-	};
+StrokeCollection.prototype.startStroke = function(state) {
+	this.currentStroke = new FullStroke(state.clone());
+	this.strokes.push(this.currentStroke);
+};
 
-	StrokeCollection.prototype.stroke = function(x, y) {
-		this.currentStroke.add(x, y);
-	};
+StrokeCollection.prototype.stroke = function(x, y) {
+	this.currentStroke.add(x, y);
+};
 
-	StrokeCollection.prototype.strokeEnd = function() {
-		var data = this.strokes;
-		this.emit("stroke-added", data);
-	};
+StrokeCollection.prototype.strokeEnd = function() {
+	var data = this.strokes;
+	this.emit("stroke-added", data);
+};
 
-	StrokeCollection.prototype.cancelStroke = function() {
-		this.strokes.pop();
-		this.currentStroke = null;
-	}
+StrokeCollection.prototype.cancelStroke = function() {
+	this.strokes.pop();
+	this.currentStroke = null;
+}
 
-//	environment.FullStroke = FullStroke;
+//	environment.StrokeCollection = StrokeCollection;
 //})(this);
-
 
 //---------------- STROKE -----------------------------
 
