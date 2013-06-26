@@ -20,13 +20,13 @@
 
 	var strokePlayer = new StrokePlayer(trailCanvas);
 
-
 	var strokeRecorder = new StrokeRecorder(userCanvas, currentBrushStyle);
 	strokeRecorder.init();
 
 	var strokeLayerManager = new StrokeLayerManager(strokeRecorder, strokePlayer);
+
 	var paletteControl = new PaletteControl(domElts);
-	
+		
 	paletteControl.on("color-changed", function(color) {
 		// alert("Color: " + color);
 		currentBrushStyle.color = color;

@@ -1,15 +1,25 @@
 
 function StrokeLayerManager(strokeRecorder, strokePlayer) {
 
-	this.strokeCollection = new StrokeCollection();
+	var MAX_FRAMES = 4;
 
-	this.clearReplayStrokes = function(strokes) {
+	var strokeCollectionArray = [];
+	var currentFrame = 0;
+
+	var getCurrentStrokeCollectionInFrame = function() {
+		return strokeCollectionArray[currentFrame];
+	};
+
+	var clearReplayStrokes = function() {
+
 		strokeRecorder.clearScreen();
 		var concurrent = getParallelState();
 		
 		strokePlayer.clear();
 
 		// Simulate 4 layers of strokes!
+
+		var strokes = getCurrentStrokeCollectionInFrame().strokes;
 
 		var multiStroke = [];
 		multiStroke.push(strokes);
@@ -47,20 +57,20 @@ function StrokeLayerManager(strokeRecorder, strokePlayer) {
 	this.resetModel = function(callback) {
 		var self = this;
 
-		var strokeCollection = this.strokeCollection;
-		if (strokeCollection) {
-			strokeCollection.cancelDraw();
+		for (var i = 0; i < strokeCollectionArray.length; i++) {
+			strokeCollectionArray[i].cancelDraw();
 		}
 
-		strokeCollection = new StrokeCollection();
-		strokeCollection.on("stroke-added", function(data) {
-			self.clearReplayStrokes(this.strokes);
-		});
-		strokeRecorder.setStrokeModel(strokeCollection);
+		for (var i = 0; i < MAX_FRAMES; i++) {
+			var strokeCollection = new StrokeCollection();
+			strokeCollection.on("stroke-added", function(data) {
+				clearReplayStrokes();
+			});
+			strokeCollectionArray[i] = strokeCollection;
+		}
+		strokeRecorder.setStrokeModel(strokeCollectionArray[0]);
 
-		this.clearReplayStrokes([]);
-
-		this.strokeCollection = strokeCollection;
+		clearReplayStrokes([]);
 
 		if (callback) {
 			callback();
