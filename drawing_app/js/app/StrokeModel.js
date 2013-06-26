@@ -1,52 +1,49 @@
 // (function(environment) {
 
-	function StrokeModel() {
+	function StrokeCollection() {
 		EventEmitter.apply(this);
 		this.strokes = [];
 		this.currentStroke = null;
 	}
 
-	StrokeModel.prototype = new EventEmitter();
+	StrokeCollection.prototype = new EventEmitter();
 
-	StrokeModel.prototype.startStroke = function(state) {
-		this.currentStroke = new Stroke(state.clone());
+	StrokeCollection.prototype.startStroke = function(state) {
+		this.currentStroke = new FullStroke(state.clone());
 		this.strokes.push(this.currentStroke);
-		//console.log("StrokeModel.startStroke");
 	};
 
-	StrokeModel.prototype.stroke = function(x, y) {
+	StrokeCollection.prototype.stroke = function(x, y) {
 		this.currentStroke.add(x, y);
-		//console.log("StrokeModel.stroke");
 	};
 
-	StrokeModel.prototype.strokeEnd = function() {
+	StrokeCollection.prototype.strokeEnd = function() {
 		var data = this.strokes;
 		this.emit("stroke-added", data);
-		//console.log("StrokeModel.strokeEnd");
 	};
 
-	StrokeModel.prototype.cancelStroke = function() {
+	StrokeCollection.prototype.cancelStroke = function() {
 		this.strokes.pop();
 		this.currentStroke = null;
 	}
 
-//	environment.StrokeModel = StrokeModel;
+//	environment.FullStroke = FullStroke;
 //})(this);
 
 
 //---------------- STROKE -----------------------------
 
-function Stroke(styleState) {
+function FullStroke(styleState) {
 	this._startTime = new Date().getTime();
 	this.pieces = [];
 	this.styleState = styleState;
 }
 
-Stroke.prototype._getDTime = function() {
-		return (new Date().getTime()) - this._startTime;
+FullStroke.prototype._getDTime = function() {
+	return (new Date().getTime()) - this._startTime;
 }
 
-Stroke.prototype.add = function(x, y) {
+FullStroke.prototype.add = function(x, y) {
 	this.pieces.push({
 		time: this._getDTime(),
 		x: x,
@@ -54,7 +51,7 @@ Stroke.prototype.add = function(x, y) {
 	});
 };
 
-Stroke.prototype.getDuration = function() {
+FullStroke.prototype.getDuration = function() {
 	var duration = 0;
 	if (this.pieces.length > 0) {
 		// Get the last piece
@@ -64,7 +61,7 @@ Stroke.prototype.getDuration = function() {
 	return duration;
 };
 
-Stroke.prototype.replay = function(context, atWhen) {
+FullStroke.prototype.replay = function(context, atWhen) {
 	var self = this;
 
 	atWhen = atWhen || 0;

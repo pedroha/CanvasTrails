@@ -10,6 +10,15 @@ var PaletteControl = function(domElts) {
     this.resetPalette = function(palette) {
         self.palette = palette;
 
+        var select = function(domElt) {
+            // Unselect all
+            for (var j = 0; j < domElts.length; j++) {
+                domElts[j].setAttribute('class', 'color-panel');
+            }
+            // Select me
+            domElt.setAttribute('class', 'color-panel selected');            
+        };
+
         for (var i = 0; i < domElts.length; i++) {
             var elt = domElts[i];
 
@@ -18,15 +27,10 @@ var PaletteControl = function(domElts) {
             elt.onclick = function(e) {
                 var color = this.style.backgroundColor;
                 self.emit("color-changed", color);
-
-                // Unselect all
-                for (var j = 0; j < domElts.length; j++) {
-                    domElts[j].setAttribute('class', 'color-panel');
-                }
-                // Select me
-                this.setAttribute('class', 'color-panel selected');
+                select(this);
             };
         }
+        select(domElts[0]);
     }
 };
 

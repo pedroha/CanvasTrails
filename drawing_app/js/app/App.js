@@ -1,7 +1,7 @@
 
 //window.onload = function setup() {
 
-	var currentStrokeLayer = 0; // For every 10 strokes, switch to the next strokeLayer
+	var currentStrokeLayer = 0;
 
 
 	var userCanvasName = "user-drawing";
@@ -32,7 +32,7 @@
 	var strokeRecorder = new StrokeRecorder(userCanvas, currentBrushStyle);
 	strokeRecorder.init();
 
-	var strokeModel;
+	var strokeCollection;
 
 	var paletteControl = new PaletteControl(domElts);
 	
@@ -45,14 +45,14 @@
 	var resetModel = function() {
 		var palette = getNewPalette();
 		paletteControl.resetPalette(palette);
+		currentBrushStyle.color = palette[0];
+		currentBrushStyle.applyStyle(userContext);
 
-//		strokeLayer = new StrokeLayer(palette);
-
-		strokeModel = new StrokeModel();
-		strokeModel.on("stroke-added", function(data) {
-			clearReplayStrokes(strokeModel.strokes);
+		strokeCollection = new StrokeCollection();
+		strokeCollection.on("stroke-added", function(data) {
+			clearReplayStrokes(strokeCollection.strokes);
 		});
-		strokeRecorder.setStrokeModel(strokeModel);
+		strokeRecorder.setStrokeModel(strokeCollection);
 
 		clearReplayStrokes([]);
 	};
