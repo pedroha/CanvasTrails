@@ -39,6 +39,7 @@ StrokePlayer.prototype.getDuration = function(strokes, concurrent) {
 		return max_t;
 	}
 }
+
 StrokePlayer.prototype.play = function(strokes, concurrent) {
 	var cnv = this.trailCanvas;
 	var c = cnv.getContext('2d');

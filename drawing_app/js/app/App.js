@@ -20,50 +20,11 @@
 
 	var strokePlayer = new StrokePlayer(trailCanvas);
 
-	var clearReplayStrokes = function(strokes) {
-		strokeRecorder.clearScreen();
-		var concurrent = getParallelState();
-		
-		strokePlayer.clear();
-
-		var multiStroke = [];
-		multiStroke.push(strokes);
-		multiStroke.push(strokes);
-		multiStroke.push(strokes);
-		multiStroke.push(strokes);
-
-		// Simulate 4 layers of strokes!
-/*
-		var duration = 0;
-
-		for (var i = 0; i < multiStroke.length; i++) {
-			var strokes = multiStroke[i];
-
-			var deferred = $.Deferred();
-			setTimeout(deferred.resolve, duration);
-
-			deferred.onsuccess = function() {
-				duration = strokePlayer.play(strokes, concurrent[0]); // need "iter" with new scope
-			};
-		}
-*/
-		var finishTime = strokePlayer.getDuration(strokes, concurrent[0]);
-		strokePlayer.play(strokes, concurrent[0]);
-
-		// Interesting visual "reverb" (when not clearing again)
-
-		setTimeout(function() {
-		//	alert("Finished drawing");
-			// strokePlayer.clear();
-			strokePlayer.play(strokes, concurrent[0]);
-		}, finishTime);
-	};
 
 	var strokeRecorder = new StrokeRecorder(userCanvas, currentBrushStyle);
 	strokeRecorder.init();
 
-	var strokeCollection;
-
+	var strokeLayerManager = new StrokeLayerManager(strokeRecorder, strokePlayer);
 	var paletteControl = new PaletteControl(domElts);
 	
 	paletteControl.on("color-changed", function(color) {
@@ -73,21 +34,12 @@
 	});
 
 	var resetModel = function() {
-		if (strokeCollection) {
-			strokeCollection.cancelDraw();
-		}
-		var palette = getNewPalette();
-		paletteControl.resetPalette(palette);
-		currentBrushStyle.color = palette[0];
-		currentBrushStyle.applyStyle(userContext);
-
-		strokeCollection = new StrokeCollection();
-		strokeCollection.on("stroke-added", function(data) {
-			clearReplayStrokes(this.strokes);
+		strokeLayerManager.resetModel(function() {
+			var palette = getNewPalette();
+			paletteControl.resetPalette(palette);
+			currentBrushStyle.color = palette[0];
+			currentBrushStyle.applyStyle(userContext);
 		});
-		strokeRecorder.setStrokeModel(strokeCollection);
-
-		clearReplayStrokes([]);
 	};
 
 	resetModel();
@@ -95,6 +47,3 @@
 	$('#restartBtn').bind('click', resetModel);
 
 //}
-
-
-
