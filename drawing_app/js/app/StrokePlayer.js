@@ -16,10 +16,8 @@ StrokePlayer.prototype.clear = function() {
 	c.fill();
 };
 
-StrokePlayer.prototype.play = function(strokes, concurrent) {
-	var cnv = this.trailCanvas;
-	var c = cnv.getContext('2d');
 
+StrokePlayer.prototype.getDuration = function(strokes, concurrent) {
 	// alert("Strokes #: " + strokes.length);
 	var time = 0;
 
@@ -28,21 +26,30 @@ StrokePlayer.prototype.play = function(strokes, concurrent) {
 	if (sequential) {
 		for (var i=0; i<strokes.length; i++) {
 			var s = strokes[i];
-			s.replay(c, time);
 			time += s.getDuration();
 		}
 		return time; // Total duration
 	}
 	else {
-		for (var i=0; i<strokes.length; i++) {
-			var s = strokes[i];
-			s.replay(c, time);
-		}
 		var max_t = 0;
 		for (var i=0; i<strokes.length; i++) {
 			var s = strokes[i];
 			max_t = Math.max(max_t, s.getDuration());
 		}
 		return max_t;
+	}
+}
+StrokePlayer.prototype.play = function(strokes, concurrent) {
+	var cnv = this.trailCanvas;
+	var c = cnv.getContext('2d');
+	var sequential = !concurrent;
+	var time = 0;
+
+	for (var i=0; i<strokes.length; i++) {
+		var s = strokes[i];
+		s.replay(c, time);
+		if (sequential) {
+			time += s.getDuration();
+		}
 	}
 }

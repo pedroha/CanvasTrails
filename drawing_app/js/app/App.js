@@ -26,7 +26,29 @@
 		
 		strokePlayer.clear();
 
-		var finishTime = strokePlayer.play(strokes, concurrent[0]);
+		var multiStroke = [];
+		multiStroke.push(strokes);
+		multiStroke.push(strokes);
+		multiStroke.push(strokes);
+		multiStroke.push(strokes);
+
+		// Simulate 4 layers of strokes!
+/*
+		var duration = 0;
+
+		for (var i = 0; i < multiStroke.length; i++) {
+			var strokes = multiStroke[i];
+
+			var deferred = $.Deferred();
+			setTimeout(deferred.resolve, duration);
+
+			deferred.onsuccess = function() {
+				duration = strokePlayer.play(strokes, concurrent[0]); // need "iter" with new scope
+			};
+		}
+*/
+		var finishTime = strokePlayer.getDuration(strokes, concurrent[0]);
+		strokePlayer.play(strokes, concurrent[0]);
 
 		// Interesting visual "reverb" (when not clearing again)
 
