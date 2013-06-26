@@ -23,7 +23,18 @@
 	var clearReplayStrokes = function(strokes) {
 		strokeRecorder.clearScreen();
 		var concurrent = getParallelState();
-		strokePlayer.play(strokes, concurrent[0]);
+		
+		strokePlayer.clear();
+
+		var finishTime = strokePlayer.play(strokes, concurrent[0]);
+
+		// Interesting visual "reverb" (when not clearing again)
+
+		setTimeout(function() {
+		//	alert("Finished drawing");
+			// strokePlayer.clear();
+			strokePlayer.play(strokes, concurrent[0]);
+		}, finishTime);
 	};
 
 	var strokeRecorder = new StrokeRecorder(userCanvas, currentBrushStyle);
@@ -40,6 +51,9 @@
 	});
 
 	var resetModel = function() {
+		if (strokeCollection) {
+			strokeCollection.cancelDraw();
+		}
 		var palette = getNewPalette();
 		paletteControl.resetPalette(palette);
 		currentBrushStyle.color = palette[0];
@@ -47,9 +61,7 @@
 
 		strokeCollection = new StrokeCollection();
 		strokeCollection.on("stroke-added", function(data) {
-
 			clearReplayStrokes(this.strokes);
-
 		});
 		strokeRecorder.setStrokeModel(strokeCollection);
 

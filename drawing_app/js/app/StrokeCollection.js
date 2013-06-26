@@ -25,7 +25,15 @@ StrokeCollection.prototype.strokeEnd = function() {
 StrokeCollection.prototype.cancelStroke = function() {
 	this.strokes.pop();
 	this.currentStroke = null;
-}
+};
+
+StrokeCollection.prototype.cancelDraw = function() {
+	var st = this.strokes;
+	for (var i = 0; i < st.length; i++) {
+		st[i].continueDraw = false;
+	}
+};
+
 
 //	environment.StrokeCollection = StrokeCollection;
 //})(this);
@@ -36,6 +44,7 @@ function FullStroke(styleState) {
 	this._startTime = new Date().getTime();
 	this.pieces = [];
 	this.styleState = styleState;
+	this.continueDraw = true;
 }
 
 FullStroke.prototype._getDTime = function() {
@@ -71,16 +80,19 @@ FullStroke.prototype.replay = function(context, atWhen) {
 		(function(iter) {
 			var p = self.pieces[iter];
 
-			setTimeout(function() {		
-				var prev = self.pieces[iter-1];
+			setTimeout(function() {
+				if (self.continueDraw) {
+					var prev = self.pieces[iter-1];
 
-				brushStyle.applyStyle(context);
+					brushStyle.applyStyle(context);
 
-				context.beginPath();
-				context.moveTo(prev.x, prev.y);
-				context.lineTo(p.x, p.y);
-				context.stroke();
+					context.beginPath();
+					context.moveTo(prev.x, prev.y);
+					context.lineTo(p.x, p.y);
+					context.stroke();
+				}
 			}, p.time + atWhen);
 		})(i);
 	}		
 };
+
