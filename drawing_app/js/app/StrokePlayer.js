@@ -5,7 +5,7 @@ function StrokePlayer(trailCanvas) {
 	this.trailCanvas = trailCanvas;
 }
 
-StrokePlayer.prototype.paint = function(strokes) {
+StrokePlayer.prototype.play = function(strokes, concurrent) {
 	var cnv = this.trailCanvas;
 	var c = cnv.getContext('2d');
 
@@ -18,7 +18,7 @@ StrokePlayer.prototype.paint = function(strokes) {
 	// alert("Strokes #: " + strokes.length);
 	var time = 0;
 
-	var sequential = false;
+	var sequential = !concurrent;
 
 	if (sequential) {
 		for (var i=0; i<strokes.length; i++) {

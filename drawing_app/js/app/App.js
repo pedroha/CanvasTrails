@@ -1,6 +1,9 @@
 
 //window.onload = function setup() {
 
+	var currentStrokeLayer = 0; // For every 10 strokes, switch to the next strokeLayer
+
+
 	var userCanvasName = "user-drawing";
 	var userTrailName = "trail-drawing";
 
@@ -22,7 +25,8 @@
 
 	var clearReplayStrokes = function(strokes) {
 		strokeRecorder.clearScreen();
-		strokePlayer.paint(strokes);
+		var concurrent = getParallelState();
+		strokePlayer.play(strokes, concurrent[0]);
 	};
 
 	var strokeRecorder = new StrokeRecorder(userCanvas, currentBrushStyle);
@@ -34,21 +38,15 @@
 	
 	paletteControl.on("color-changed", function(color) {
 		// alert("Color: " + color);
-
 		currentBrushStyle.color = color;
-
-		var context = userContext;
-		if (!context) {
-		    alert("Missing context");
-		}
-		else {
-		    currentBrushStyle.applyStyle(context);
-		}
+		currentBrushStyle.applyStyle(userContext);
 	});
 
 	var resetModel = function() {
 		var palette = getNewPalette();
 		paletteControl.resetPalette(palette);
+
+//		strokeLayer = new StrokeLayer(palette);
 
 		strokeModel = new StrokeModel();
 		strokeModel.on("stroke-added", function(data) {

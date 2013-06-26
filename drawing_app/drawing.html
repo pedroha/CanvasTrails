@@ -29,6 +29,14 @@
             height: 700px;
         }
 
+        #currentFrame {
+            font-size: 24px;
+            display: inline-block;
+            background-color: cyan;
+            width: 30px;
+            text-align: center;
+        }
+
     </style>
 </head>
 <body>
@@ -50,6 +58,12 @@
 
         <div id="control-container">
             <input id="restartBtn" type="button" value="Restart"></button>
+            Frame: <div id="currentFrame">1</div>
+            Parallel
+            <input id="concurrent_0" type="checkbox" checked></button>
+            <input id="concurrent_1" type="checkbox"></button>
+            <input id="concurrent_2" type="checkbox" checked></button>
+            <input id="concurrent_3" type="checkbox"></button>
         </div>
 
 	</div>
@@ -80,7 +94,8 @@
     <script src="js/app/PaletteColors.js"></script>
     <script src="js/app/PaletteControl.js"></script>
     <script src="js/app/StrokeRecorder.js"></script>
-    <script src="js/app/StrokePainter.js"></script>
+    <script src="js/app/StrokePlayer.js"></script>
+    <script src="js/app/UserControl.js"></script>
     <script src="js/app/App.js"></script>
 
     <script src="js/lib/fastclick.js"></script>
