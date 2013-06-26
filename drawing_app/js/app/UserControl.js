@@ -1,13 +1,13 @@
 function getParallelState() {
 
 	var $concurrent = $('input[type=checkbox]');
-	
-	$concurrent.bind('click', function(event) {
+	//$concurrent.bind('click', function(event) {
+	//});
+
+	var result = [];
+	$concurrent.each(function() {
+		var checked = $(this).attr('checked') != "";
+		result.push(checked);
 	});
-
-	var concurrent = $concurrent.map(function() {
-		return $(this).attr('checked') != "";
-	}).get();
-
-	return concurrent;
+	return result;
 }
