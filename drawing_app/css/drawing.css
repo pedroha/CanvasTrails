@@ -1,6 +1,5 @@
-/* Need a better CSS Reset: meyer? */
+/* Need a better CSS Reset: Meyer? */
 body {
-    text-align: center;
 }
 
 /* My CSS classes. Notice no ID-based selector for styling! We don't need to fight against specificity.
@@ -70,6 +69,7 @@ body {
 
 #trail-container {
     position: relative;
+    height: 460px;
 }
 
 .drawing {

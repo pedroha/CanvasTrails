@@ -8,14 +8,14 @@
 
 	StrokeModel.prototype = new EventEmitter();
 
-	StrokeModel.prototype.startStroke = function(x, y, state) {
-		this.currentStroke = new Stroke(x, y, state);
+	StrokeModel.prototype.startStroke = function(state) {
+		this.currentStroke = new Stroke(state.clone());
 		this.strokes.push(this.currentStroke);
 		//console.log("StrokeModel.startStroke");
 	};
 
-	StrokeModel.prototype.stroke = function(x, y, state) {
-		this.currentStroke.add(x, y, state);
+	StrokeModel.prototype.stroke = function(x, y) {
+		this.currentStroke.add(x, y);
 		//console.log("StrokeModel.stroke");
 	};
 
@@ -34,56 +34,42 @@
 //})(this);
 
 
-//---------------- BrushStyle -----------------------------
-
-function BrushStyle(color, width) {
-    this.color = color;
-    this.width = width || 18;
-    this.lineCap = "round";
-    this.lineJoin = "round";
-}
-
-BrushStyle.prototype = {
-    applyStyle: function(c) {
-        c.lineWidth = this.width;
-        c.strokeStyle = this.color;
-        c.lineCap = this.lineCap;
-        c.lineJoin = this.lineJoin;
-    },
-    toString: function() {
-        var state = "{" +
-            "color: " + this.color + ", " +
-            "width: " + this.width + ", " +
-            "lineCap: " + this.lineCap + ", " +
-            "lineJoin: " + this.lineJoin +
-        "}";
-        return state;
-    }
-};
-
 //---------------- STROKE -----------------------------
 
-function Stroke(x, y, state) {
+function Stroke(state) {
 	this._startTime = new Date().getTime();
 	this.pieces = [];
-	this.add(x, y, state);
+	this.state = state;
 }
 
 Stroke.prototype._getDTime = function() {
 		return (new Date().getTime()) - this._startTime;
 }
 
-Stroke.prototype.add = function(x, y, state) {
+Stroke.prototype.add = function(x, y) {
 	this.pieces.push({
 		time: this._getDTime(),
 		x: x,
-		y: y,
-		state: state
+		y: y
 	});
 };
 
-Stroke.prototype.replay = function(context) {
+Stroke.prototype.getDuration = function() {
+	var duration = 0;
+	if (this.pieces.length > 0) {
+		// Get the last piece
+		var last = this.pieces[this.pieces.length-1];
+		duration = last.time;
+	}
+	return duration;
+};
+
+Stroke.prototype.replay = function(context, atWhen) {
 	var self = this;
+
+	atWhen = atWhen || 0;
+
+	var brushStyle = new BrushStyle(self.state.color);
 
 	for (var i = 1; i < self.pieces.length; i++) {
 		(function(iter) {
@@ -92,14 +78,13 @@ Stroke.prototype.replay = function(context) {
 			setTimeout(function() {		
 				var prev = self.pieces[iter-1];
 
-				var paintState = p.state;
-				paintState.applyStyle(context);
+				brushStyle.applyStyle(context);
 
 				context.beginPath();
 				context.moveTo(prev.x, prev.y);
 				context.lineTo(p.x, p.y);
 				context.stroke();
-			}, p.time);
+			}, p.time + atWhen);
 		})(i);
-	}
+	}		
 };

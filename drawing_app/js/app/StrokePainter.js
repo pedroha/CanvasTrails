@@ -16,9 +16,21 @@ StrokePlayer.prototype.paint = function(strokes) {
 	c.fill();
 
 	// alert("Strokes #: " + strokes.length);
+	var time = 0;
 
-	for (var i=0; i<strokes.length; i++) {
-		var s = strokes[i];
-		s.replay(c);
-	}	
+	var sequential = false;
+
+	if (sequential) {
+		for (var i=0; i<strokes.length; i++) {
+			var s = strokes[i];
+			s.replay(c, time);
+			time += s.getDuration();
+		}		
+	}
+	else {
+		for (var i=0; i<strokes.length; i++) {
+			var s = strokes[i];
+			s.replay(c, time);
+		}		
+	}
 }

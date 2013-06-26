@@ -2,16 +2,17 @@
  *  StrokeRecorder
  */
 
-var StrokeRecorder = function(userCanvas, paletteControl) {
+var StrokeRecorder = function(userCanvas, brushStyle) {
     var self = this;
 
 	if (!userCanvas) {
 		throw new Error("StrokeRecorder(): Missing userCanvas param");
 	}
-	if (!paletteControl) {
-		throw new Error("StrokeRecorder(): Missing paletteControl param");
+	if (!brushStyle) {
+		throw new Error("StrokeRecorder(): Missing brushStyle param");
 	}
     this.userCanvas = userCanvas;
+    this.brushStyle = brushStyle;
 
 	var c = userCanvas.getContext('2d');
 
@@ -22,16 +23,13 @@ var StrokeRecorder = function(userCanvas, paletteControl) {
         	}
             c.beginPath();
             c.moveTo(x, y);
-
-            var brush = paletteControl.getCurrentBrush();
-            self.strokeModel.startStroke(x, y, brush);
+            self.strokeModel.startStroke(brushStyle);
+            self.strokeModel.stroke(x, y);
 	    },
         stroke: function(x, y) {
             c.lineTo(x, y);
             c.stroke();
-
-            var brush = paletteControl.getCurrentBrush();
-            self.strokeModel.stroke(x, y, brush);
+            self.strokeModel.stroke(x, y);
         },
         strokeEnd: function() {
         	self.strokeModel.strokeEnd();
@@ -50,8 +48,7 @@ StrokeRecorder.prototype.clearScreen = function() {
     cnv.width = cnv.width; // Reset the whole canvas
 
     // Reset last state
-    var brush = paletteControl.getCurrentBrush();
-    brush.applyStyle(c);
+    this.brushStyle.applyStyle(c);
 };
 
 StrokeRecorder.prototype.init = function() {
