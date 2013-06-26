@@ -55,6 +55,7 @@
 			clearReplayStrokes(strokeModel.strokes);
 		});
 		strokeRecorder.setStrokeModel(strokeModel);
+
 		clearReplayStrokes([]);
 	};
 

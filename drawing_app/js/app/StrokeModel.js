@@ -36,10 +36,10 @@
 
 //---------------- STROKE -----------------------------
 
-function Stroke(state) {
+function Stroke(styleState) {
 	this._startTime = new Date().getTime();
 	this.pieces = [];
-	this.state = state;
+	this.styleState = styleState;
 }
 
 Stroke.prototype._getDTime = function() {
@@ -69,7 +69,7 @@ Stroke.prototype.replay = function(context, atWhen) {
 
 	atWhen = atWhen || 0;
 
-	var brushStyle = new BrushStyle(self.state.color);
+	var brushStyle = new BrushStyle(self.styleState.color);
 
 	for (var i = 1; i < self.pieces.length; i++) {
 		(function(iter) {
