@@ -25,6 +25,10 @@
             display: none;
         }
 
+        .page {
+            height: 700px;
+        }
+
     </style>
 </head>
 <body>
@@ -44,9 +48,13 @@
             <canvas id="trail-drawing" class="drawing">No CANVAS support!!</canvas>
         </div>
 
-        <div id="log"></log>
-    	
+        <div id="control-container">
+            <input id="restartBtn" type="button" value="Restart"></button>
+        </div>
+
 	</div>
+
+    <div id="log"></log>
 
     <script type="text/javascript">
 
@@ -67,6 +75,7 @@
 
     <script src="js/lib/zepto.js"></script>
     <script src="js/lib/util.js"></script>
+    <script src="js/app/Brush.js"></script>
     <script src="js/app/StrokeModel.js"></script>
     <script src="js/app/PaletteColors.js"></script>
     <script src="js/app/PaletteControl.js"></script>

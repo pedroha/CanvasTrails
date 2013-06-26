@@ -1,69 +1,42 @@
-// TODO: May want to have a function constructor PaletteControl(colorElts[])
+var PaletteControl = function(domElts) {
+    EventEmitter.apply(this);
 
-var paletteControl = (function() {
-	var context;
-
-    // cocurious
-    //var palette = ["8B3D2B","D45C22","F7CD44","1E5A56","AFE6D4"];
-
-    // iOS 7
-    //var palette = ["2267F2","1BDDF2","3FBF04","F28705","F24738"];
-
-
-    var lucky = Math.floor(Math.random() * PaletteColors.length);
-    console.log(PaletteColors[lucky]);
-    var palette = PaletteColors[lucky].colors;
-    
-    var brushStyles = [];
-
-    for (var i = 0; i < palette.length; i++) {
-        var paletteColor = '#' + palette[i];
-        var style = new BrushStyle(paletteColor);        
-        brushStyles.push(style);
+    if (!domElts) {
+        throw new Error("PaletteControl.init() missing arguments.")
     }
-    // alert(brushStyles);
-	var currentBrushStyle = brushStyles[4]; // Pick an arbitrary one
-	//currentBrushStyle.applyStyle(context);
 
-    var colorElts = [];
-    
-    for (var i = 0; i < 5; i++) {
-        var elt = document.getElementById('color-' + (i+1));
-        colorElts.push(elt);
-        
-        elt.style.backgroundColor = '#' + palette[i];
+    var self = this;
 
-        elt.onclick = (function(iter) {
-            var result = function(e) {
-                currentBrushStyle = brushStyles[iter];
+    this.resetPalette = function(palette) {
+        self.palette = palette;
 
-                if (!context) {
-                	alert("Missing context");
-                }
-                else {
-                    currentBrushStyle.applyStyle(context);
-                }
-                
+        for (var i = 0; i < domElts.length; i++) {
+            var elt = domElts[i];
+
+            elt.style.backgroundColor = '#' + palette[i];
+
+            elt.onclick = function(e) {
+                var color = this.style.backgroundColor;
+                self.emit("color-changed", color);
+
                 // Unselect all
-                for (var j = 0; j < colorElts.length; j++) {
-                    colorElts[j].setAttribute('class', 'color-panel');
+                for (var j = 0; j < domElts.length; j++) {
+                    domElts[j].setAttribute('class', 'color-panel');
                 }
                 // Select me
                 this.setAttribute('class', 'color-panel selected');
             };
-            return result;
-        })(i);
+        }
     }
-    return {
-    	init: function(ctx) {
-    		context = ctx;
-			currentBrushStyle.applyStyle(context);
-    	}
-    	, reapplyStyle: function() {
-			currentBrushStyle.applyStyle(context);
-    	}
-    	, getCurrentBrush: function() {
-    		return currentBrushStyle;
-    	}
-    };
-})();
+};
+
+PaletteControl.prototype = new EventEmitter();
+
+var getNewPalette = function() {
+    var lucky = Math.floor(Math.random() * PaletteColors.length);
+    console.log(PaletteColors[lucky]);
+    var palette = PaletteColors[lucky].colors;
+
+    return palette;
+};
+

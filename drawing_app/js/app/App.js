@@ -1,7 +1,6 @@
 
 //window.onload = function setup() {
 
-
 	var userCanvasName = "user-drawing";
 	var userTrailName = "trail-drawing";
 
@@ -11,25 +10,59 @@
     var trailCanvas = document.getElementById(userTrailName);
 	var trailContext = trailCanvas.getContext("2d");
 
-	paletteControl.init(userContext);
+	var currentBrushStyle = new BrushStyle('red');
 
-	var strokeModel = new StrokeModel();
+	var domElts = [];
+	for (var i = 0; i < 5; i++) {
+	    var elt = document.getElementById('color-' + (i+1));
+	    domElts.push(elt);
+	}
+
 	var strokePlayer = new StrokePlayer(trailCanvas);
-
-	var strokeRecorder = new StrokeRecorder(userCanvas, paletteControl);
-
-	strokeRecorder.init();
-	strokeRecorder.setStrokeModel(strokeModel);
-
-	// alert("onload");
 
 	var clearReplayStrokes = function(strokes) {
 		strokeRecorder.clearScreen();
 		strokePlayer.paint(strokes);
 	};
 
-	strokeModel.on("stroke-added", function(data) {
-		clearReplayStrokes(strokeModel.strokes);
+	var strokeRecorder = new StrokeRecorder(userCanvas, currentBrushStyle);
+	strokeRecorder.init();
+
+	var strokeModel;
+
+	var paletteControl = new PaletteControl(domElts);
+	
+	paletteControl.on("color-changed", function(color) {
+		// alert("Color: " + color);
+
+		currentBrushStyle.color = color;
+
+		var context = userContext;
+		if (!context) {
+		    alert("Missing context");
+		}
+		else {
+		    currentBrushStyle.applyStyle(context);
+		}
 	});
 
+	var resetModel = function() {
+		var palette = getNewPalette();
+		paletteControl.resetPalette(palette);
+
+		strokeModel = new StrokeModel();
+		strokeModel.on("stroke-added", function(data) {
+			clearReplayStrokes(strokeModel.strokes);
+		});
+		strokeRecorder.setStrokeModel(strokeModel);
+		clearReplayStrokes([]);
+	};
+
+	resetModel();
+
+	$('#restartBtn').bind('click', resetModel);
+
 //}
+
+
+
