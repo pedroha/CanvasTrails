@@ -76,3 +76,5 @@ http://stackoverflow.com/questions/1664785/html5-canvas-resize-to-fit-window
 CSS is problematic since it will rescale the canvas.
 Use HTML markup: <canvas width="600" height="400"> or JS.
 
+i-Media Queries
+http://stephen.io/mediaqueries/
