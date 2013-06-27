@@ -35,6 +35,9 @@
 
 	var resetModel = function() {
 		strokeLayerManager.resetModel(function setPalette(palette) {
+			var $checkboxes = $('input[type=checkbox]');
+			$checkboxes.prop('checked', true);
+
 			palette = palette || getNewPalette();
 			paletteControl.resetPalette(palette);
 			currentBrushStyle.color = palette[0];
