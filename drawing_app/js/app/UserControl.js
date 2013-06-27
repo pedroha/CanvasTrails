@@ -5,8 +5,8 @@ function getConcurrentState() {
 
 	var result = [];
 	$checkboxes.each(function() {
-		var checked = $(this).attr('checked') != "";
-		result.push(checked);
+		var unchecked = $(this).attr('checked') == "";
+		result.push(unchecked);
 	});
 	return result;
 }
@@ -16,8 +16,8 @@ function getSequentialState() {
 
 	var result = [];
 	$checkboxes.each(function() {
-		var unchecked = $(this).attr('checked') == "";
-		result.push(unchecked);
+		var checked = $(this).attr('checked') != "";
+		result.push(checked);
 	});
 	return result;
 }
