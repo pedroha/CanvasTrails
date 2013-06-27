@@ -35,7 +35,6 @@ function StrokeLayerManager(strokeRecorder, strokePlayer) {
 		multiStroke.push(strokes);
 		multiStroke.push(strokes);
 		multiStroke.push(strokes);
-		multiStroke.push(strokes);
 
 		// For a single StrokeCollection looks good, for multiple layer (not so much)
 
@@ -99,7 +98,7 @@ function StrokeLayerManager(strokeRecorder, strokePlayer) {
 
 		// Cancel current drawing
 		for (var i = 0; i < strokeCollectionArray.length; i++) {
-			strokeCollectionArray[i].cancelDraw();
+			strokeCollectionArray[i].setDrawEnabled(false);
 		}
 
 		for (var i = 0; i < MAX_FRAMES; i++) {
