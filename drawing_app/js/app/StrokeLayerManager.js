@@ -18,6 +18,10 @@ function StrokeLayerManager(strokeRecorder, strokePlayer) {
 	};
 
 	var clearReplayStrokes = function() {
+		for (var i = 0; i < strokeCollectionArray.length; i++) {
+			strokeCollectionArray[i].setDrawEnabled(true);
+		}
+
 		strokeRecorder.clearScreen();
 		var sequential = getSequentialState();
 
@@ -86,7 +90,7 @@ function StrokeLayerManager(strokeRecorder, strokePlayer) {
 */
 	this.stop = function() {
 		for (var i = 0; i < strokeCollectionArray.length; i++) {
-			strokeCollectionArray[i].cancelDraw();
+			strokeCollectionArray[i].setDrawEnabled(false);
 		}
 	};
 

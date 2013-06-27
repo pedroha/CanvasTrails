@@ -37,13 +37,12 @@ StrokeCollection.prototype.cancelStroke = function() {
 	this.currentStroke = null;
 };
 
-StrokeCollection.prototype.cancelDraw = function() {
+StrokeCollection.prototype.setDrawEnabled = function(enabled) {
+	enabled = (enabled == true);
 	var st = this.strokes;
 	for (var i = 0; i < st.length; i++) {
-		st[i].continueDraw = false;
+		st[i].continueDraw = enabled;
 	}
-	// TODO: store the "setInterval" and cancel each one of them!
-	// Then reset "continueDraw" to true.
 };
 
 
