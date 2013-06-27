@@ -26,7 +26,7 @@
 	var strokeLayerManager = new StrokeLayerManager(strokeRecorder, strokePlayer);
 
 	var paletteControl = new PaletteControl(domElts);
-		
+
 	paletteControl.on("color-changed", function(color) {
 		// alert("Color: " + color);
 		currentBrushStyle.color = color;
@@ -34,16 +34,18 @@
 	});
 
 	var resetModel = function() {
-		strokeLayerManager.resetModel(function() {
-			var palette = getNewPalette();
+		strokeLayerManager.resetModel(function setPalette(palette) {
+			palette = palette || getNewPalette();
 			paletteControl.resetPalette(palette);
 			currentBrushStyle.color = palette[0];
 			currentBrushStyle.applyStyle(userContext);
+			return palette;
 		});
 	};
 
 	resetModel();
 
 	$('#restartBtn').bind('click', resetModel);
-
+	$('#replayBtn').bind('click', strokeLayerManager.replay);
+	$('#stopBtn').bind('click', strokeLayerManager.stop);
 //}

@@ -4,6 +4,7 @@ function StrokeCollection() {
 	EventEmitter.apply(this);
 	this.strokes = [];
 	this.currentStroke = null;
+	this.last = null;
 }
 
 StrokeCollection.prototype = new EventEmitter();
@@ -14,7 +15,16 @@ StrokeCollection.prototype.startStroke = function(state) {
 };
 
 StrokeCollection.prototype.stroke = function(x, y) {
-	this.currentStroke.add(x, y);
+	var valid = true;
+
+	var last = this.last;
+	if (last) {
+		valid = (Math.abs(last.x - x ) < 100) && (Math.abs(last.y - y) < 100);
+	}
+	if (valid) {
+		this.currentStroke.add(x, y);
+	}
+	this.last = {x: x, y: y};
 };
 
 StrokeCollection.prototype.strokeEnd = function() {
@@ -32,6 +42,8 @@ StrokeCollection.prototype.cancelDraw = function() {
 	for (var i = 0; i < st.length; i++) {
 		st[i].continueDraw = false;
 	}
+	// TODO: store the "setInterval" and cancel each one of them!
+	// Then reset "continueDraw" to true.
 };
 
 
@@ -41,10 +53,10 @@ StrokeCollection.prototype.cancelDraw = function() {
 //---------------- STROKE -----------------------------
 
 function FullStroke(styleState) {
-	this._startTime = new Date().getTime();
 	this.pieces = [];
 	this.styleState = styleState;
 	this.continueDraw = true;
+	this._startTime = new Date().getTime();
 }
 
 FullStroke.prototype._getDTime = function() {

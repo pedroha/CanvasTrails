@@ -17,11 +17,8 @@ StrokePlayer.prototype.clear = function() {
 };
 
 
-StrokePlayer.prototype.getDuration = function(strokes, concurrent) {
-	// alert("Strokes #: " + strokes.length);
+StrokePlayer.prototype.getDuration = function(strokes, sequential) {
 	var time = 0;
-
-	var sequential = !concurrent;
 
 	if (sequential) {
 		for (var i=0; i<strokes.length; i++) {
@@ -40,10 +37,9 @@ StrokePlayer.prototype.getDuration = function(strokes, concurrent) {
 	}
 }
 
-StrokePlayer.prototype.play = function(strokes, concurrent) {
+StrokePlayer.prototype.play = function(strokes, sequential) {
 	var cnv = this.trailCanvas;
 	var c = cnv.getContext('2d');
-	var sequential = !concurrent;
 	var time = 0;
 
 	for (var i=0; i<strokes.length; i++) {

@@ -1,3 +1,8 @@
+// Clean Replay: copy whole data structure (that's tied up to setTimeout() with a flag)
+
+// Whenever we want to "replay":
+//   Cancel previous drawing in progress
+//   Recreate a new model and redraw this model
 
 function StrokeLayerManager(strokeRecorder, strokePlayer) {
 
@@ -6,15 +11,16 @@ function StrokeLayerManager(strokeRecorder, strokePlayer) {
 	var strokeCollectionArray = [];
 	var currentFrame = 0;
 
+	this.strokeCollectionArray = strokeCollectionArray;
+
 	var getCurrentStrokeCollectionInFrame = function() {
 		return strokeCollectionArray[currentFrame];
 	};
 
 	var clearReplayStrokes = function() {
-
 		strokeRecorder.clearScreen();
-		var concurrent = getParallelState();
-		
+		var sequential = getSequentialState();
+
 		strokePlayer.clear();
 
 		// Simulate 4 layers of strokes!
@@ -27,23 +33,31 @@ function StrokeLayerManager(strokeRecorder, strokePlayer) {
 		multiStroke.push(strokes);
 		multiStroke.push(strokes);
 
+		// For a single StrokeCollection looks good, for multiple layer (not so much)
+
+		// timeOffset looks "off"!
+
 		var durations = [];
 		var totalDuration = 0;
 		for (var i = 0; i < multiStroke.length; i++) {
 			var strokes = multiStroke[i];
-			var dur = strokePlayer.getDuration(strokes, concurrent[i]);
+			var dur = strokePlayer.getDuration(strokes, sequential[i]);
 			totalDuration += dur;
 			durations.push(dur);
 		}
 
 		var timeOffset = 0;
 		for (var i = 0; i < multiStroke.length; i++) {
-			(function(iter) {
+
+			(function(iter, atWhen) {
 				var strokes = multiStroke[iter];
+
 				setTimeout(function() {
-					strokePlayer.play(strokes, concurrent[iter]);
-				}, timeOffset);
-			})(i);
+					strokePlayer.play(strokes, sequential[iter]);
+				}, atWhen);
+
+			})(i, timeOffset);
+
 			timeOffset += durations[i];
 		}
 
@@ -54,9 +68,32 @@ function StrokeLayerManager(strokeRecorder, strokePlayer) {
 		}
 	};
 
-	this.resetModel = function(callback) {
+	this.replay = clearReplayStrokes;
+
+/*
+	var setFrameTimer = function() {
+
+		var TEN_SECS = 10 * 1000; // Alternate frames every 10 seconds
+
+		setTimeout(function() {
+			currentFrame = (currentFrame + 1) % MAX_FRAMES;
+			
+			// We also want to change the palette ??
+			strokeRecorder.setStrokeModel(strokeCollectionArray[currentFrame]);
+
+		}, TEN_SECS);
+	};
+*/
+	this.stop = function() {
+		for (var i = 0; i < strokeCollectionArray.length; i++) {
+			strokeCollectionArray[i].cancelDraw();
+		}
+	};
+
+	this.resetModel = function(setPalette) {
 		var self = this;
 
+		// Cancel current drawing
 		for (var i = 0; i < strokeCollectionArray.length; i++) {
 			strokeCollectionArray[i].cancelDraw();
 		}
@@ -68,12 +105,14 @@ function StrokeLayerManager(strokeRecorder, strokePlayer) {
 			});
 			strokeCollectionArray[i] = strokeCollection;
 		}
-		strokeRecorder.setStrokeModel(strokeCollectionArray[0]);
+
+		strokeRecorder.setStrokeModel(strokeCollectionArray[currentFrame]);
+		//setFrameTimer();
 
 		clearReplayStrokes([]);
 
-		if (callback) {
-			callback();
+		if (setPalette) {
+			setPalette();
 		}
 	};
 }

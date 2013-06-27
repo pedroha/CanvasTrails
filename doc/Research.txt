@@ -78,3 +78,14 @@ Use HTML markup: <canvas width="600" height="400"> or JS.
 
 i-Media Queries
 http://stephen.io/mediaqueries/
+
+
+WEB ANIMATION API
+=================
+
+http://brian.sol1.net/svg/2013/06/26/introducing-web-animations
+http://www.w3.org/TR/web-animations/
+
+https://github.com/web-animations/web-animations-js
+
+
