@@ -10,20 +10,19 @@ Issues with <canvas> in Firefox
  * Brush is red color -> resetModel() didn't work !?
  * Few other painting/coloring issues
 
+New Palette (change palette?)
 
+* [Stop] -> Not cancelling running "intervals" in the future
 
 
 -----------------------
+
 Major features
 
 A) Support multiple Animation frames (maybe 4 to 8)
 B) Brush Sizes (up to 4)
 C) Support both brushes: Static (to paint background) and Animated
 D) Support for iPad resolution (normal and retina, mini-ipad)
-
-? Collaborate with UX person (or designer?)
-
-----
 
 
 -----------------------

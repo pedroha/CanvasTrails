@@ -33,16 +33,18 @@
 		currentBrushStyle.applyStyle(userContext);
 	});
 
+	var setNewPalette = function() {
+		var palette = getNewPalette();
+		paletteControl.resetPalette(palette);
+		currentBrushStyle.color = palette[0];
+		currentBrushStyle.applyStyle(userContext);
+	};
+
 	var resetModel = function() {
-		strokeLayerManager.resetModel(function setPalette(palette) {
+		strokeLayerManager.resetModel(function setPalette() {
 			var $checkboxes = $('input[type=checkbox]');
 			$checkboxes.prop('checked', true);
-
-			palette = palette || getNewPalette();
-			paletteControl.resetPalette(palette);
-			currentBrushStyle.color = palette[0];
-			currentBrushStyle.applyStyle(userContext);
-			return palette;
+			setNewPalette();
 		});
 	};
 
@@ -51,4 +53,13 @@
 	$('#restartBtn').bind('click', resetModel);
 	$('#replayBtn').bind('click', strokeLayerManager.replay);
 	$('#stopBtn').bind('click', strokeLayerManager.stop);
+	$('#paletteBtn').bind('click', setNewPalette);
+
+
+	$(window).bind('keydown', function(evt) {
+		if (evt.keyCode == 32) { // Press space for undo last stroke
+			strokeLayerManager.undoLast();
+		}
+	});
+
 //}

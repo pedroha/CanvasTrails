@@ -93,6 +93,12 @@ function StrokeLayerManager(strokeRecorder, strokePlayer) {
 		}
 	};
 
+	this.undoLast = function() {
+		// Hack
+		strokeCollectionArray[0].undoLast(); // Undo for all of them ?
+		clearReplayStrokes();
+	};
+
 	this.resetModel = function(setPalette) {
 		var self = this;
 

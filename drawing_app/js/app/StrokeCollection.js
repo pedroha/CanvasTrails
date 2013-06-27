@@ -32,9 +32,8 @@ StrokeCollection.prototype.strokeEnd = function() {
 	this.emit("stroke-added", data);
 };
 
-StrokeCollection.prototype.cancelStroke = function() {
+StrokeCollection.prototype.undoLast = function() {
 	this.strokes.pop();
-	this.currentStroke = null;
 };
 
 StrokeCollection.prototype.setDrawEnabled = function(enabled) {
