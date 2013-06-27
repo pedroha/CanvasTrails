@@ -7,6 +7,10 @@ function StrokePlayer(trailCanvas) {
 
 StrokePlayer.prototype.clear = function() {
 	var cnv = this.trailCanvas;
+
+	cnv.width = cnv.width; // This should do!
+
+	/*
 	var c = cnv.getContext('2d');
 
 	// Clear all the canvas
@@ -14,6 +18,7 @@ StrokePlayer.prototype.clear = function() {
 	c.rect(0, 0, cnv.width, cnv.height);
 	c.fillStyle = "white";
 	c.fill();
+	*/
 };
 
 
