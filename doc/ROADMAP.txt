@@ -1,5 +1,30 @@
 ROADMAP
 
+
+-----------------------
+
+TODAY (June 27)
+
+Issues with <canvas> in Firefox
+ 
+ * Brush is red color -> resetModel() didn't work !?
+ * Few other painting/coloring issues
+
+New Palette (change palette?)
+
+* [Stop] -> Not cancelling running "intervals" in the future
+
+
+-----------------------
+
+Major features
+
+A) Support multiple Animation frames (maybe 4 to 8)
+B) Brush Sizes (up to 4)
+C) Support both brushes: Static (to paint background) and Animated
+D) Support for iPad resolution (normal and retina, mini-ipad)
+
+
 -----------------------
 DONE
 
@@ -17,9 +42,6 @@ b) Adding a masking layer but still it doesn't work perfectly: user can still pa
 
    Done: re-architecture (v1)
 
------------------------
-
-TODAY (June 20)
 
 2.5) Add support for touch events using:
 https://developer.mozilla.org/en-US/docs/Web/Guide/DOM/Events/Touch_events
@@ -34,9 +56,6 @@ First touch: no drawing (should we add a DOT? Yeah)
 
 EventEmitter: minor improvements
 
------------------------
-TODO
-
 3) Color palette: brush colors
    https://kuler.adobe.com/explore/
    Exercise on jquery selector and output to console for each match.
@@ -44,13 +63,3 @@ TODO
 4) HTML page redesign (mobile friendly), ipad-friendly
 
 -----------------------
-Major features
-
-A) Support multiple Animation frames (maybe 4 to 8)
-B) Brush Sizes (up to 4)
-C) Support both brushes: Static (to paint background) and Animated
-D) Support for iPad resolution (normal and retina, mini-ipad)
-
-? Collaborate with UX person (or designer?)
-
-----

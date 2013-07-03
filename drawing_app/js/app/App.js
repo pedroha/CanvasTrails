@@ -26,24 +26,40 @@
 	var strokeLayerManager = new StrokeLayerManager(strokeRecorder, strokePlayer);
 
 	var paletteControl = new PaletteControl(domElts);
-		
+
 	paletteControl.on("color-changed", function(color) {
 		// alert("Color: " + color);
 		currentBrushStyle.color = color;
 		currentBrushStyle.applyStyle(userContext);
 	});
 
+	var setNewPalette = function() {
+		var palette = getNewPalette();
+		paletteControl.resetPalette(palette);
+		currentBrushStyle.color = palette[0];
+		currentBrushStyle.applyStyle(userContext);
+	};
+
 	var resetModel = function() {
-		strokeLayerManager.resetModel(function() {
-			var palette = getNewPalette();
-			paletteControl.resetPalette(palette);
-			currentBrushStyle.color = palette[0];
-			currentBrushStyle.applyStyle(userContext);
+		strokeLayerManager.resetModel(function setPalette() {
+			var $checkboxes = $('input[type=checkbox]');
+			$checkboxes.prop('checked', true);
+			setNewPalette();
 		});
 	};
 
 	resetModel();
 
 	$('#restartBtn').bind('click', resetModel);
+	$('#replayBtn').bind('click', strokeLayerManager.replay);
+	$('#stopBtn').bind('click', strokeLayerManager.stop);
+	$('#paletteBtn').bind('click', setNewPalette);
+
+
+	$(window).bind('keydown', function(evt) {
+		if (evt.keyCode == 32) { // Press space for undo last stroke
+			strokeLayerManager.undoLast();
+		}
+	});
 
 //}

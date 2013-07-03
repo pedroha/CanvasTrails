@@ -27,6 +27,18 @@
 
         .page {
             height: 700px;
+
+        }
+
+        #trail-container {
+            height: 400px;
+            padding-top: 30px;
+            margin-bottom: 30px;
+/*
+            background: url(https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSSpAYEFA1MVrGowIwCPfRLcQB4gU07wFl14jEZ4n_y3_IeOm4FNw);
+*/
+            /* background: url(http://t3.gstatic.com/images?q=tbn:ANd9GcS0mvi7ByYHDgJJfrAhrnMEl924CAKmz9v528VMI6BUv4MSpdux);
+            */            
         }
 
         #currentFrame {
@@ -58,14 +70,16 @@
 
         <div id="control-container">
             <input id="restartBtn" type="button" value="Restart"></button>
+            <input id="replayBtn" type="button" value="Replay"></button>
+            <input id="stopBtn" type="button" value="Stop"></button>
+            <input id="paletteBtn" type="button" value="Change Palette"></button>
             <!--
             Frame: <div id="currentFrame">1</div>
-            // -->
-            Parallel
-            <input id="concurrent_0" type="checkbox" checked></button>
-            <input id="concurrent_1" type="checkbox"></button>
-            <input id="concurrent_2" type="checkbox" checked></button>
-            <input id="concurrent_3" type="checkbox"></button>
+            -->
+            Sequence
+            <input id="sequence_0" type="checkbox" checked></button>
+            <input id="sequence_1" type="checkbox" checked></button>
+            <input id="sequence_2" type="checkbox" checked></button>
         </div>
 
 	</div>

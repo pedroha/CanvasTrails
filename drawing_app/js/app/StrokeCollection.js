@@ -4,6 +4,7 @@ function StrokeCollection() {
 	EventEmitter.apply(this);
 	this.strokes = [];
 	this.currentStroke = null;
+	this.last = null;
 }
 
 StrokeCollection.prototype = new EventEmitter();
@@ -14,7 +15,16 @@ StrokeCollection.prototype.startStroke = function(state) {
 };
 
 StrokeCollection.prototype.stroke = function(x, y) {
-	this.currentStroke.add(x, y);
+	var valid = true;
+
+	var last = this.last;
+	if (last) {
+		valid = (Math.abs(last.x - x ) < 100) && (Math.abs(last.y - y) < 100);
+	}
+	if (valid) {
+		this.currentStroke.add(x, y);
+	}
+	this.last = {x: x, y: y};
 };
 
 StrokeCollection.prototype.strokeEnd = function() {
@@ -22,15 +32,15 @@ StrokeCollection.prototype.strokeEnd = function() {
 	this.emit("stroke-added", data);
 };
 
-StrokeCollection.prototype.cancelStroke = function() {
+StrokeCollection.prototype.undoLast = function() {
 	this.strokes.pop();
-	this.currentStroke = null;
 };
 
-StrokeCollection.prototype.cancelDraw = function() {
+StrokeCollection.prototype.setDrawEnabled = function(enabled) {
+	enabled = (enabled == true);
 	var st = this.strokes;
 	for (var i = 0; i < st.length; i++) {
-		st[i].continueDraw = false;
+		st[i].continueDraw = enabled;
 	}
 };
 
@@ -41,10 +51,10 @@ StrokeCollection.prototype.cancelDraw = function() {
 //---------------- STROKE -----------------------------
 
 function FullStroke(styleState) {
-	this._startTime = new Date().getTime();
 	this.pieces = [];
 	this.styleState = styleState;
 	this.continueDraw = true;
+	this._startTime = new Date().getTime();
 }
 
 FullStroke.prototype._getDTime = function() {
