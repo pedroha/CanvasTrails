@@ -19,6 +19,9 @@ Need to test on mobile more often
 TODAY (June 27)
 
 * Save / Load -> Model (brush vector instructions) in localStorage
+Saving/Retrieving a model to LocalStorage.
+
+TODO: Layer doesn't hold the Palette (need to refactor few things)
 
 
 -----------------------
