@@ -19,9 +19,9 @@ Layer.prototype = new EventEmitter();
 
 Layer.prototype.restore = function(model) {
 	for (var i = 0; i < model.length; i++) {
-		var fullStroke = model[i];
-		var stroke = restoreFullStroke(fullStroke);
-		this.strokes.push(stroke);
+		var fullStroke = new FullStroke(model[i].styleState);
+		fullStroke.pieces = model[i].pieces;
+		this.strokes.push(fullStroke);
 	}
 };
 
@@ -67,12 +67,6 @@ function FullStroke(styleState) {
 	this.styleState = styleState;
 	this.continueDraw = true;
 	this._startTime = new Date().getTime();
-}
-
-function restoreFullStroke(strokeModel) {
-	var fullStroke = new FullStroke(strokeModel.styleState);
-	fullStroke.pieces = strokeModel.pieces;
-	return fullStroke;
 }
 
 FullStroke.prototype._getDTime = function() {
