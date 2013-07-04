@@ -1,20 +1,36 @@
-// (function(environment) {
 
-function StrokeCollection() {
+function Layer(model) {
 	EventEmitter.apply(this);
+
+	// Model state: Layer = strokes[] + palette
 	this.strokes = [];
+	this.palette = [];
+	this.sequential = false; // also part of the Layer class		
+
+	if (model) {
+		this.restore(model);
+	}
+	// Transient fields (i.e. not saved)
 	this.currentStroke = null;
 	this.last = null;
 }
 
-StrokeCollection.prototype = new EventEmitter();
+Layer.prototype = new EventEmitter();
 
-StrokeCollection.prototype.startStroke = function(state) {
+Layer.prototype.restore = function(model) {
+	for (var i = 0; i < model.length; i++) {
+		var fullStroke = model[i];
+		var stroke = restoreFullStroke(fullStroke);
+		this.strokes.push(stroke);
+	}
+};
+
+Layer.prototype.startStroke = function(state) {
 	this.currentStroke = new FullStroke(state.clone());
 	this.strokes.push(this.currentStroke);
 };
 
-StrokeCollection.prototype.stroke = function(x, y) {
+Layer.prototype.stroke = function(x, y) {
 	var valid = true;
 
 	var last = this.last;
@@ -27,26 +43,22 @@ StrokeCollection.prototype.stroke = function(x, y) {
 	this.last = {x: x, y: y};
 };
 
-StrokeCollection.prototype.strokeEnd = function() {
+Layer.prototype.strokeEnd = function() {
 	var data = this.strokes;
 	this.emit("stroke-added", data);
 };
 
-StrokeCollection.prototype.undoLast = function() {
+Layer.prototype.undoLast = function() {
 	this.strokes.pop();
 };
 
-StrokeCollection.prototype.setDrawEnabled = function(enabled) {
+Layer.prototype.setDrawEnabled = function(enabled) {
 	enabled = (enabled == true);
 	var st = this.strokes;
 	for (var i = 0; i < st.length; i++) {
 		st[i].continueDraw = enabled;
 	}
 };
-
-
-//	environment.StrokeCollection = StrokeCollection;
-//})(this);
 
 //---------------- STROKE -----------------------------
 
@@ -55,6 +67,12 @@ function FullStroke(styleState) {
 	this.styleState = styleState;
 	this.continueDraw = true;
 	this._startTime = new Date().getTime();
+}
+
+function restoreFullStroke(strokeModel) {
+	var fullStroke = new FullStroke(strokeModel.styleState);
+	fullStroke.pieces = strokeModel.pieces;
+	return fullStroke;
 }
 
 FullStroke.prototype._getDTime = function() {

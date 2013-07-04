@@ -1,9 +1,27 @@
 ROADMAP
 
+-----------------------
+
+Major features
+
+* Multi-layer
+* FullStroke (play/pause/rewind: Play Framework) -> Use some pausable/resumable recursive setTimeout()
+* Persistence (localStorage)
+* Inking (inking gestures)
+
+Would like to cleanup: onclick -> click/touchstart (and no fastclick library included: lighter)
+
+Need to test on mobile more often
+
 
 -----------------------
 
 TODAY (June 27)
+
+* Save / Load -> Model (brush vector instructions) in localStorage
+
+
+-----------------------
 
 Issues with <canvas> in Firefox
  
@@ -13,6 +31,7 @@ Issues with <canvas> in Firefox
 New Palette (change palette?)
 
 * [Stop] -> Not cancelling running "intervals" in the future
+
 
 
 -----------------------

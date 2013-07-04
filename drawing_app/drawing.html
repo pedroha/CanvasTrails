@@ -21,10 +21,6 @@
             z-index: 100;
         }
 
-        #mobile-trail-container {
-            display: none;
-        }
-
         .page {
             height: 700px;
 
@@ -72,10 +68,14 @@
             <input id="restartBtn" type="button" value="Restart"></button>
             <input id="replayBtn" type="button" value="Replay"></button>
             <input id="stopBtn" type="button" value="Stop"></button>
-            <input id="paletteBtn" type="button" value="Change Palette"></button>
+            <input id="addLayerBtn" type="button" value="Add Layer"></button>
+            <input id="saveBtn" type="button" value="Save"></button>
+            <input id="loadBtn" type="button" value="Load"></button>
             <!--
             Frame: <div id="currentFrame">1</div>
             -->
+            <br/>
+            <br/>
             Sequence
             <input id="sequence_0" type="checkbox" checked></button>
             <input id="sequence_1" type="checkbox" checked></button>
@@ -87,6 +87,7 @@
     <div id="log"></log>
 
     <script type="text/javascript">
+        var is_touch = !!('ontouchstart' in window);
 
         var userCnv = document.getElementById('user-drawing');
         var trailCnv = document.getElementById('trail-drawing');
@@ -106,7 +107,7 @@
     <script src="js/lib/zepto.js"></script>
     <script src="js/lib/util.js"></script>
     <script src="js/app/Brush.js"></script>
-    <script src="js/app/StrokeCollection.js"></script>
+    <script src="js/app/Layer.js"></script>
     <script src="js/app/PaletteColors.js"></script>
     <script src="js/app/PaletteControl.js"></script>
     <script src="js/app/StrokeRecorder.js"></script>
@@ -118,7 +119,6 @@
     <script src="js/lib/fastclick.js"></script>
 
     <script>
-        var is_touch = !!('ontouchstart' in window);
         if (is_touch) {
 
             // Fast click

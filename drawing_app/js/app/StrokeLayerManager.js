@@ -8,18 +8,18 @@ function StrokeLayerManager(strokeRecorder, strokePlayer) {
 
 	var MAX_FRAMES = 4;
 
-	var strokeCollectionArray = [];
+	var layerArray = [];
 	var currentFrame = 0;
 
-	this.strokeCollectionArray = strokeCollectionArray;
+	this.layerArray = layerArray;
 
-	var getCurrentStrokeCollectionInFrame = function() {
-		return strokeCollectionArray[currentFrame];
+	var getCurrentLayerInFrame = function() {
+		return layerArray[currentFrame];
 	};
 
 	var clearReplayStrokes = function() {
-		for (var i = 0; i < strokeCollectionArray.length; i++) {
-			strokeCollectionArray[i].setDrawEnabled(true);
+		for (var i = 0; i < layerArray.length; i++) {
+			layerArray[i].setDrawEnabled(true);
 		}
 
 		strokeRecorder.clearScreen();
@@ -29,14 +29,14 @@ function StrokeLayerManager(strokeRecorder, strokePlayer) {
 
 		// Simulate 4 layers of strokes!
 
-		var strokes = getCurrentStrokeCollectionInFrame().strokes;
+		var strokes = getCurrentLayerInFrame().strokes;
 
 		var multiStroke = [];
 		multiStroke.push(strokes);
 		multiStroke.push(strokes);
 		multiStroke.push(strokes);
 
-		// For a single StrokeCollection looks good, for multiple layer (not so much)
+		// For a single Layer looks good, for multiple layer (not so much)
 
 		// timeOffset looks "off"!
 
@@ -73,55 +73,72 @@ function StrokeLayerManager(strokeRecorder, strokePlayer) {
 
 	this.replay = clearReplayStrokes;
 
-/*
-	var setFrameTimer = function() {
-
-		var TEN_SECS = 10 * 1000; // Alternate frames every 10 seconds
-
-		setTimeout(function() {
-			currentFrame = (currentFrame + 1) % MAX_FRAMES;
-			
-			// We also want to change the palette ??
-			strokeRecorder.setStrokeModel(strokeCollectionArray[currentFrame]);
-
-		}, TEN_SECS);
-	};
-*/
 	this.stop = function() {
-		for (var i = 0; i < strokeCollectionArray.length; i++) {
-			strokeCollectionArray[i].setDrawEnabled(false);
+		for (var i = 0; i < layerArray.length; i++) {
+			layerArray[i].setDrawEnabled(false);
 		}
 	};
 
 	this.undoLast = function() {
 		// Hack
-		strokeCollectionArray[0].undoLast(); // Undo for all of them ?
+		layerArray[0].undoLast(); // Undo for all of them ?
 		clearReplayStrokes();
 	};
 
 	this.resetModel = function(setPalette) {
 		var self = this;
 
-		// Cancel current drawing
-		for (var i = 0; i < strokeCollectionArray.length; i++) {
-			strokeCollectionArray[i].setDrawEnabled(false);
+		// Cancel current drawing (HACK -> need to cancel all the timers OR use some recursive resumable version)
+		for (var i = 0; i < layerArray.length; i++) {
+			layerArray[i].setDrawEnabled(false);
 		}
 
-		for (var i = 0; i < MAX_FRAMES; i++) {
-			var strokeCollection = new StrokeCollection();
-			strokeCollection.on("stroke-added", function(data) {
+		for (var i = 0; i < 1; i++) {
+			var layer = new Layer();
+			layer.on("stroke-added", function(data) {
 				clearReplayStrokes();
 			});
-			strokeCollectionArray[i] = strokeCollection;
+			layerArray[i] = layer;
 		}
-
-		strokeRecorder.setStrokeModel(strokeCollectionArray[currentFrame]);
-		//setFrameTimer();
+		strokeRecorder.setStrokeModel(layerArray[currentFrame]);
 
 		clearReplayStrokes([]);
 
 		if (setPalette) {
 			setPalette();
 		}
+	};
+
+	this.saveModel = function() {
+		var name = window.prompt("Enter model title");
+		// alert("Saving Model " + name);
+
+		var stringData = JSON.stringify(layerArray[0].strokes);
+
+		localStorage.setItem(name, stringData);
+
+
+
+	};
+
+	this.loadModel = function(setPalette) {
+		var name = window.prompt("Enter model title");
+		// alert("Loading Model " + name);
+		
+		var stringData = localStorage.getItem(name);
+		var model = JSON.parse(stringData);
+		console.log(model);
+
+		layerArray[currentFrame] = new Layer(model);
+
+		strokeRecorder.setStrokeModel(layerArray[currentFrame]);
+
+		clearReplayStrokes([]);
+
+		if (setPalette) {
+			setPalette();
+		}
+
+		// ResetModel() -> Change Palette to the Viewer!
 	};
 }

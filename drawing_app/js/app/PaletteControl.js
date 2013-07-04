@@ -1,10 +1,9 @@
-var PaletteControl = function(domElts) {
+var PaletteControl = function(domElts, eventType) {
     EventEmitter.apply(this);
 
-    if (!domElts) {
+    if (!domElts || !eventType) {
         throw new Error("PaletteControl.init() missing arguments.")
     }
-
     var self = this;
 
     this.resetPalette = function(palette) {
@@ -19,16 +18,16 @@ var PaletteControl = function(domElts) {
             domElt.setAttribute('class', 'color-panel selected');            
         };
 
+        var changeColor = function(e) {
+            var color = this.style.backgroundColor;
+            self.emit("color-changed", color);
+            select(this);
+        };
+
         for (var i = 0; i < domElts.length; i++) {
             var elt = domElts[i];
-
             elt.style.backgroundColor = '#' + palette[i];
-
-            elt.onclick = function(e) {
-                var color = this.style.backgroundColor;
-                self.emit("color-changed", color);
-                select(this);
-            };
+            elt.addEventListener(eventType, changeColor, false);
         }
         select(domElts[0]);
     }
