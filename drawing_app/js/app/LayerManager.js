@@ -114,14 +114,15 @@ function StrokeLayerManager(strokeRecorder, strokePlayer) {
 		// alert("Saving Model " + name);
 
 		var stringData = JSON.stringify(layerArray[0].strokes);
-
 		localStorage.setItem(name, stringData);
-
-
-
 	};
 
 	this.loadModel = function(setPalette) {
+		// Cancel current drawing (HACK -> need to cancel all the timers OR use some recursive resumable version)
+		for (var i = 0; i < layerArray.length; i++) {
+			layerArray[i].setDrawEnabled(false);
+		}
+
 		var name = window.prompt("Enter model title");
 		// alert("Loading Model " + name);
 		
@@ -129,9 +130,13 @@ function StrokeLayerManager(strokeRecorder, strokePlayer) {
 		var model = JSON.parse(stringData);
 		console.log(model);
 
-		layerArray[currentFrame] = new Layer(model);
+		var layer = new Layer(model);
+		layer.on("stroke-added", function(data) {
+			clearReplayStrokes();
+		});
+		layerArray[currentFrame] = layer;
 
-		strokeRecorder.setStrokeModel(layerArray[currentFrame]);
+		strokeRecorder.setStrokeModel(layer);
 
 		clearReplayStrokes([]);
 
