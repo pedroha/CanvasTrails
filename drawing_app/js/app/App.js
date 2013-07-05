@@ -18,15 +18,7 @@
 	    domElts.push(elt);
 	}
 
-	var strokePlayer = new StrokePlayer(trailCanvas);
-
-	var strokeRecorder = new StrokeRecorder(userCanvas, currentBrushStyle);
-	strokeRecorder.init();
-
-	var strokeLayerManager = new StrokeLayerManager(strokeRecorder, strokePlayer);
-
 	var cursorEventType = (is_touch) ? "touchstart" : "click"; // Want to get rid of "fastclick.js" (if possible)
-
 	var paletteControl = new PaletteControl(domElts, cursorEventType);
 
 	paletteControl.on("color-changed", function(color) {
@@ -35,33 +27,37 @@
 		currentBrushStyle.applyStyle(userContext);
 	});
 
+
+	var strokePlayer = new StrokePlayer(trailCanvas);
+
+	var strokeRecorder = new StrokeRecorder(userCanvas, currentBrushStyle);
+	strokeRecorder.init();
+
+	var strokeLayerManager = new StrokeLayerManager(strokeRecorder, strokePlayer, paletteControl);
+
 	var addLayer = function() {
-		strokeLayerManager.addLayer();
+		strokeLayerManager.addLayer(); // which creates a new color palette
 
-		setNewPalette();
-	};
-
-	var setNewPalette = function() {
-		var palette = getNewPalette();
-		paletteControl.setPalette(palette);
+		var palette = paletteControl.getPalette();
 		currentBrushStyle.color = palette[0];
 		currentBrushStyle.applyStyle(userContext);
 	};
 
-
 	var resetModel = function() {
-		strokeLayerManager.resetModel(function setPalette() {
-			var $checkboxes = $('input[type=checkbox]');
-			$checkboxes.prop('checked', true);
+		strokeLayerManager.resetModel(); // Set model to empty!
 
-			setNewPalette();
-		});
+		var palette = paletteControl.getPalette();
+		currentBrushStyle.color = palette[0];
+		currentBrushStyle.applyStyle(userContext);
+
+		var $checkboxes = $('input[type=checkbox]');
+		$checkboxes.prop('checked', false);
 	};
 
 	resetModel();
 
 	var loadModel = function() {
-		strokeLayerManager.loadModel(setNewPalette);
+		strokeLayerManager.loadModel();
 	};
 
 	$('#restartBtn').bind(cursorEventType, resetModel);

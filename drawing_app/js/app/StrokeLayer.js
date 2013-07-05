@@ -23,6 +23,7 @@ Layer.prototype.restore = function(model) {
 		fullStroke.pieces = model[i].pieces;
 		this.strokes.push(fullStroke);
 	}
+	this.palette = model.palette;
 };
 
 Layer.prototype.startStroke = function(state) {

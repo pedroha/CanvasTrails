@@ -15,7 +15,7 @@ var PaletteControl = function(domElts, eventType) {
                 domElts[j].setAttribute('class', 'color-panel');
             }
             // Select me
-            domElt.setAttribute('class', 'color-panel selected');            
+            domElt.setAttribute('class', 'color-panel selected');
         };
 
         var changeColor = function(e) {
@@ -30,6 +30,10 @@ var PaletteControl = function(domElts, eventType) {
             elt.addEventListener(eventType, changeColor, false);
         }
         select(domElts[0]);
+    };
+
+    this.getPalette = function() {
+        return this.palette;
     }
 };
 
