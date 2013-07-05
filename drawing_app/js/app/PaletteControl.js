@@ -6,7 +6,7 @@ var PaletteControl = function(domElts, eventType) {
     }
     var self = this;
 
-    this.resetPalette = function(palette) {
+    this.setPalette = function(palette) {
         self.palette = palette;
 
         var select = function(domElt) {

@@ -6,10 +6,10 @@ var StrokeRecorder = function(userCanvas, brushStyle) {
     var self = this;
 
 	if (!userCanvas) {
-		throw new Error("StrokeRecorder(): Missing userCanvas param");
+		throw new Error("StrokeRecorder(): Missing userCanvas");
 	}
 	if (!brushStyle) {
-		throw new Error("StrokeRecorder(): Missing brushStyle param");
+		throw new Error("StrokeRecorder(): Missing brushStyle");
 	}
     this.userCanvas = userCanvas;
     this.brushStyle = brushStyle;

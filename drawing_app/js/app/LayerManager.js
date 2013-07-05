@@ -109,12 +109,25 @@ function StrokeLayerManager(strokeRecorder, strokePlayer) {
 		}
 	};
 
+	var LIST_NAME = "CanvasModels";
+
 	this.saveModel = function() {
 		var name = window.prompt("Enter model title");
 		// alert("Saving Model " + name);
 
 		var stringData = JSON.stringify(layerArray[0].strokes);
 		localStorage.setItem(name, stringData);
+
+		var names = localStorage.getItem(LIST_NAME);
+		if (names) {
+			var elts = JSON.parse(names); // to array
+			elts.push(name);
+		}
+		else {
+			var elts = [name];
+		}
+		var eltStr = JSON.stringify(elts);
+		localStorage.setItem(LIST_NAME, eltStr);
 	};
 
 	this.loadModel = function(setPalette) {
@@ -145,5 +158,27 @@ function StrokeLayerManager(strokeRecorder, strokePlayer) {
 		}
 
 		// ResetModel() -> Change Palette to the Viewer!
+	};
+
+	this.removeModel = function() {
+		var name = window.prompt("Enter model title");
+		alert("Removing Model " + name);
+
+		localStorage.removeItem(name);
+
+		var names = localStorage.getItem(LIST_NAME);
+		if (names) {
+			var elts = JSON.parse(names); // to array
+			var idx = elts.indexOf(name);
+			elts.splice(idx, 1);
+
+			var strElts = JSON.stringify(elts);
+			localStorage.setItem(LIST_NAME, strElts);
+		}
+	};
+
+	this.listModels = function() {
+		var names = localStorage.getItem(LIST_NAME);
+		alert("Models: " + names);
 	};
 }

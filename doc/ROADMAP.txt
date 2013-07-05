@@ -13,6 +13,8 @@ Would like to cleanup: onclick -> click/touchstart (and no fastclick library inc
 
 Need to test on mobile more often
 
+TODO: StrokeRecorder -> EventEmitter instead of "hardcoded" setStrokeModel with all events
+
 
 -----------------------
 

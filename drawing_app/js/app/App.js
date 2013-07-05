@@ -35,26 +35,30 @@
 		currentBrushStyle.applyStyle(userContext);
 	});
 
+	var addLayer = function() {
+		strokeLayerManager.addLayer();
+
+		setNewPalette();
+	};
+
 	var setNewPalette = function() {
 		var palette = getNewPalette();
-		paletteControl.resetPalette(palette);
+		paletteControl.setPalette(palette);
 		currentBrushStyle.color = palette[0];
 		currentBrushStyle.applyStyle(userContext);
 	};
+
 
 	var resetModel = function() {
 		strokeLayerManager.resetModel(function setPalette() {
 			var $checkboxes = $('input[type=checkbox]');
 			$checkboxes.prop('checked', true);
+
 			setNewPalette();
 		});
 	};
 
 	resetModel();
-
-	var saveModel = function() {
-		strokeLayerManager.saveModel();
-	};
 
 	var loadModel = function() {
 		strokeLayerManager.loadModel(setNewPalette);
@@ -63,10 +67,13 @@
 	$('#restartBtn').bind(cursorEventType, resetModel);
 	$('#replayBtn').bind(cursorEventType, strokeLayerManager.replay);
 	$('#stopBtn').bind(cursorEventType, strokeLayerManager.stop);
-	$('#addLayerBtn').bind(cursorEventType, setNewPalette);
+	$('#addLayerBtn').bind(cursorEventType, addLayer);
 
-	$('#saveBtn').bind(cursorEventType, saveModel);
-	$('#loadBtn').bind(cursorEventType, loadModel)
+	// Model
+	$('#saveModelBtn').bind(cursorEventType, strokeLayerManager.saveModel);
+	$('#loadModelBtn').bind(cursorEventType, loadModel);
+	$('#removeModelBtn').bind(cursorEventType, strokeLayerManager.removeModel);
+	$('#listModelBtn').bind(cursorEventType, strokeLayerManager.listModels);
 
 
 	$(window).bind('keydown', function(evt) {

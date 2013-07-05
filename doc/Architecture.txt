@@ -3,21 +3,45 @@ Application Architecture
 Classes
 -------
 
-StrokeModel: contains the information for each stroke in the current frame
-StrokeRecorder: records a single stroke
-StrokePlayer: plays a collection of strokes in parallel
+App: builds the application
+Brush
+FullStroke
+Layer
+LayerManager
+PaletteColors
+PaletteControl
+StrokePlayer
+StrokeRecorder
+UserControl
+
+MVC
+
+Model: Brush, FullStroke, Layer
+View: PaletteControl
+Controller: App, LayerManager, PaletteControl, StrokePlayer, StrokeRecorder, UserControl
+
+---
+
+LayerManager: contains and manages all the StrokeLayers.
+
+StrokeLayer: each layer has a collection of FullStrokes and an associated color palette.
+StrokeRecorder: records a single full stroke
+StrokePlayer: plays a collection of strokes in parallel (or in sequence)
 
 	StrokeRecorder:
-		StrokeModel.add(x, y, paintState);
-		StrokeModel.emit("addStroke", new Event(x, y, paintState) );
+		StrokeLayer.add(x, y, paintState);
+		StrokeLayer.emit("stroke-added", x, y, paintState);
 
-	StrokeModel.on("addStroke", function(event) { // event.data contains all the info
-		var strokes = self.getStrokeCollection();
-		StrokePlayer.play(strokes);
+	LayerManager.on("stroke-added", function(event) {	// clearReplayStrokes();
+	  	StrokeRecorder.clearScreen();
+
+	  	for each strokes in StrokeLayer[]:
+	  		StrokePlayer.play(strokes);
 	});
 
 Input: StrokeRecorder (UserCanvas layer: user interactions)
 Output: StrokePlayer (TrailCanvas layer: for replaying the trail animation)
+
 
 Architectural decisions
 -----------------------
