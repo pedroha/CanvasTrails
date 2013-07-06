@@ -1,11 +1,10 @@
 
-function Layer(model) {
+function StrokeLayer(model) {
 	EventEmitter.apply(this);
 
-	// Model state: Layer = strokes[] + palette
+	// Model state: StrokeLayer = strokes[] + palette
 	this.strokes = [];
 	this.palette = [];
-	this.sequential = false; // also part of the Layer class		
 
 	if (model) {
 		this.restore(model);
@@ -15,23 +14,25 @@ function Layer(model) {
 	this.last = null;
 }
 
-Layer.prototype = new EventEmitter();
+StrokeLayer.prototype = new EventEmitter();
 
-Layer.prototype.restore = function(model) {
-	for (var i = 0; i < model.length; i++) {
-		var fullStroke = new FullStroke(model[i].styleState);
-		fullStroke.pieces = model[i].pieces;
+StrokeLayer.prototype.restore = function(layer) {
+	var strokes = layer.strokes;
+
+	for (var i = 0; i < strokes.length; i++) {
+		var fullStroke = new FullStroke(strokes[i].styleState);
+		fullStroke.pieces = strokes[i].pieces;
 		this.strokes.push(fullStroke);
 	}
-	this.palette = model.palette;
+	this.palette = layer.palette;
 };
 
-Layer.prototype.startStroke = function(state) {
+StrokeLayer.prototype.startStroke = function(state) {
 	this.currentStroke = new FullStroke(state.clone());
 	this.strokes.push(this.currentStroke);
 };
 
-Layer.prototype.stroke = function(x, y) {
+StrokeLayer.prototype.stroke = function(x, y) {
 	var valid = true;
 
 	var last = this.last;
@@ -44,16 +45,16 @@ Layer.prototype.stroke = function(x, y) {
 	this.last = {x: x, y: y};
 };
 
-Layer.prototype.strokeEnd = function() {
+StrokeLayer.prototype.strokeEnd = function() {
 	var data = this.strokes;
 	this.emit("stroke-added", data);
 };
 
-Layer.prototype.undoLast = function() {
+StrokeLayer.prototype.undoLast = function() {
 	this.strokes.pop();
 };
 
-Layer.prototype.setDrawEnabled = function(enabled) {
+StrokeLayer.prototype.setDrawEnabled = function(enabled) {
 	enabled = (enabled == true);
 	var st = this.strokes;
 	for (var i = 0; i < st.length; i++) {

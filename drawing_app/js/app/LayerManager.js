@@ -9,8 +9,6 @@ function StrokeLayerManager(strokeRecorder, strokePlayer, paletteControl) {
 	var MAX_FRAMES = 4;
 
 	var layerArray = [];
-	var currentFrame = 0;
-
 
 	var clearReplayStrokes = function() {
 		//alert(layerArray.length);
@@ -87,14 +85,13 @@ function StrokeLayerManager(strokeRecorder, strokePlayer, paletteControl) {
 		cancelDrawing();
 
 		layerArray = [];
-		currentFrame = 0;
 
 		this.addLayer();
 	};
 
 	this.addLayer = function() {
 
-		var layer = new Layer();
+		var layer = new StrokeLayer();
 		layer.palette = getNewPalette();
 		paletteControl.setPalette(layer.palette);
 
@@ -103,8 +100,7 @@ function StrokeLayerManager(strokeRecorder, strokePlayer, paletteControl) {
 		});
 		layerArray.push(layer);
 
-		strokeRecorder.setStrokeModel(layerArray[currentFrame]);
-		currentFrame++;
+		strokeRecorder.setStrokeModel(layer);
 
 		clearReplayStrokes([]);
 	};
@@ -152,7 +148,7 @@ function StrokeLayerManager(strokeRecorder, strokePlayer, paletteControl) {
 		layerArray = []; // Reset
 
 		for (var i = 0; i < model.length; i++) {
-			var layer = new Layer(model[i]);
+			var layer = new StrokeLayer(model[i]);
 
 			layer.on("stroke-added", function(data) {
 				clearReplayStrokes();
