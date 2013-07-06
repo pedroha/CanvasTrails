@@ -108,28 +108,16 @@ function StrokeLayerManager(strokeRecorder, strokePlayer, paletteControl) {
 
 	// ------------- LocalStorage persistence --------------------------
 
-	var LIST_NAME = "CanvasModels";
+	var WORK_PREFIX = "W-";
+
+	var getWorkName = function(name) { return WORK_PREFIX + name; };
 
 	this.saveModel = function() {
 		var name = window.prompt("Enter model title");
 		// alert("Saving Model " + name);
 
 		var stringData = JSON.stringify(layerArray);
-		localStorage.setItem(name, stringData);
-
-		var names = localStorage.getItem(LIST_NAME);
-		if (names && names !== "null") {
-			// BUG: duplicate names
-			var elts = JSON.parse(names); // to array
-			if (elts.indexOf(name) < 0) {
-				elts.push(name);
-			}
-		}
-		else {
-			var elts = [name];
-		}
-		var eltStr = JSON.stringify(elts);
-		localStorage.setItem(LIST_NAME, eltStr);
+		localStorage.setItem( getWorkName(name), stringData);
 	};
 
 	this.loadModel = function() {
@@ -140,6 +128,8 @@ function StrokeLayerManager(strokeRecorder, strokePlayer, paletteControl) {
 
 		var name = window.prompt("Enter model title");
 		// alert("Loading Model " + name);
+
+		name = getWorkName(name);
 		
 		var stringData = localStorage.getItem(name);
 		var model = JSON.parse(stringData);
@@ -166,21 +156,32 @@ function StrokeLayerManager(strokeRecorder, strokePlayer, paletteControl) {
 		var name = window.prompt("Enter model title");
 		alert("Removing Model " + name);
 
+		name = getWorkName(name);
 		localStorage.removeItem(name);
-
-		var names = localStorage.getItem(LIST_NAME);
-		if (names && names != "null") {
-			var elts = JSON.parse(names); // to array
-			var idx = elts.indexOf(name);
-			elts.splice(idx, 1);
-
-			var strElts = JSON.stringify(elts);
-			localStorage.setItem(LIST_NAME, strElts);
-		}
 	};
 
 	this.listModels = function() {
-		var names = localStorage.getItem(LIST_NAME);
-		alert("Models: " + names);
+		var works = [];
+		for (var i = 0; i < localStorage.length; i++) {
+			var key = localStorage.key(i);
+			var work = localStorage.getItem(key);
+
+			if (key && key.indexOf(WORK_PREFIX) === 0) {
+				key = key.substr(WORK_PREFIX.length);
+				works.push(key);
+			}
+		}
+		alert("Models: " + works);
 	};
 }
+
+	var browseLocalStorage = function() {
+		for (var i = 0; i < localStorage.length; i++) {
+			var key = localStorage.key(i);
+			var work = localStorage.getItem(key);
+			console.log(key, work);
+		}
+	};
+
+	// localStorage.clear();
+
