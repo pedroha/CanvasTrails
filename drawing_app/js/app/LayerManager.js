@@ -117,7 +117,8 @@ function StrokeLayerManager(strokeRecorder, strokePlayer, paletteControl) {
 		// alert("Saving Model " + name);
 
 		var stringData = JSON.stringify(layerArray);
-		localStorage.setItem( getWorkName(name), stringData);
+		var wname = getWorkName(name);
+		localStorage.setItem( wname, stringData);
 	};
 
 	this.loadModel = function() {
@@ -129,9 +130,12 @@ function StrokeLayerManager(strokeRecorder, strokePlayer, paletteControl) {
 		var name = window.prompt("Enter model title");
 		// alert("Loading Model " + name);
 
-		name = getWorkName(name);
-		
-		var stringData = localStorage.getItem(name);
+		var wname = getWorkName(name);
+		var stringData = localStorage.getItem(wname);
+		if (!stringData) {
+			alert("Work not found: " + name);
+			return;
+		}
 		var model = JSON.parse(stringData);
 		console.log(model);
 
@@ -157,8 +161,8 @@ function StrokeLayerManager(strokeRecorder, strokePlayer, paletteControl) {
 		var name = window.prompt("Enter model title");
 		alert("Removing Model " + name);
 
-		name = getWorkName(name);
-		localStorage.removeItem(name);
+		var wname = getWorkName(name);
+		localStorage.removeItem(wname);
 	};
 
 	this.listModels = function() {
