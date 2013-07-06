@@ -146,8 +146,9 @@ function StrokeLayerManager(strokeRecorder, strokePlayer, paletteControl) {
 			layerArray.push(layer);
 		}
 
-		// Continue with last layer (or create a new layer?)
+		// Restore last layer model and last palette
 		strokeRecorder.setStrokeModel(layer);
+		paletteControl.setPalette(layer.palette);
 
 		clearReplayStrokes([]);
 	};
