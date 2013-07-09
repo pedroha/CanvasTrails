@@ -114,11 +114,14 @@ function StrokeLayerManager(strokeRecorder, strokePlayer, paletteControl) {
 
 	this.saveModel = function() {
 		var name = window.prompt("Enter model title");
-		// alert("Saving Model " + name);
 
-		var stringData = JSON.stringify(layerArray);
-		var wname = getWorkName(name);
-		localStorage.setItem( wname, stringData);
+		if (name) {
+			// alert("Saving Model " + name);
+
+			var stringData = JSON.stringify(layerArray);
+			var wname = getWorkName(name);
+			localStorage.setItem( wname, stringData);		
+		}
 	};
 
 	this.loadModel = function() {
@@ -128,41 +131,46 @@ function StrokeLayerManager(strokeRecorder, strokePlayer, paletteControl) {
 		}
 
 		var name = window.prompt("Enter model title");
-		// alert("Loading Model " + name);
 
-		var wname = getWorkName(name);
-		var stringData = localStorage.getItem(wname);
-		if (!stringData) {
-			alert("Work not found: " + name);
-			return;
+		if (name) {
+			// alert("Loading Model " + name);
+
+			var wname = getWorkName(name);
+			var stringData = localStorage.getItem(wname);
+			if (!stringData) {
+				alert("Work not found: " + name);
+				return;
+			}
+			var model = JSON.parse(stringData);
+			console.log(model);
+
+			layerArray = []; // Reset
+
+			for (var i = 0; i < model.length; i++) {
+				var layer = new StrokeLayer(model[i]);
+
+				layer.on("stroke-added", function(data) {
+					clearReplayStrokes();
+				});
+				layerArray.push(layer);
+			}
+
+			// Restore last layer model and last palette
+			strokeRecorder.setStrokeModel(layer);
+			paletteControl.setPalette(layer.palette);
+
+			clearReplayStrokes([]);	
 		}
-		var model = JSON.parse(stringData);
-		console.log(model);
-
-		layerArray = []; // Reset
-
-		for (var i = 0; i < model.length; i++) {
-			var layer = new StrokeLayer(model[i]);
-
-			layer.on("stroke-added", function(data) {
-				clearReplayStrokes();
-			});
-			layerArray.push(layer);
-		}
-
-		// Restore last layer model and last palette
-		strokeRecorder.setStrokeModel(layer);
-		paletteControl.setPalette(layer.palette);
-
-		clearReplayStrokes([]);
 	};
 
 	this.removeModel = function() {
 		var name = window.prompt("Enter model title");
-		alert("Removing Model " + name);
+		if (name) {
+			alert("Removing Model " + name);
 
-		var wname = getWorkName(name);
-		localStorage.removeItem(wname);
+			var wname = getWorkName(name);
+			localStorage.removeItem(wname);			
+		}
 	};
 
 	this.listModels = function() {
@@ -180,13 +188,13 @@ function StrokeLayerManager(strokeRecorder, strokePlayer, paletteControl) {
 	};
 }
 
-	var browseLocalStorage = function() {
-		for (var i = 0; i < localStorage.length; i++) {
-			var key = localStorage.key(i);
-			var work = localStorage.getItem(key);
-			console.log(key, work);
-		}
-	};
+var browseLocalStorage = function() {
+	for (var i = 0; i < localStorage.length; i++) {
+		var key = localStorage.key(i);
+		var work = localStorage.getItem(key);
+		console.log(key, work);
+	}
+};
 
-	// localStorage.clear();
+// localStorage.clear();
 
