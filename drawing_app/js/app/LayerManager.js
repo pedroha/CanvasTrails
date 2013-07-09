@@ -90,19 +90,28 @@ function StrokeLayerManager(strokeRecorder, strokePlayer, paletteControl) {
 	};
 
 	this.addLayer = function() {
+		var MAX_LAYERS = 5;
 
-		var layer = new StrokeLayer();
-		layer.palette = getNewPalette();
-		paletteControl.setPalette(layer.palette);
+		if (layerArray.length < MAX_LAYERS) {
 
-		layer.on("stroke-added", function(data) {
-			clearReplayStrokes();
-		});
-		layerArray.push(layer);
+			var layer = new StrokeLayer();
+			layer.palette = getNewPalette();
+			paletteControl.setPalette(layer.palette);
 
-		strokeRecorder.setStrokeModel(layer);
+			layer.on("stroke-added", function(data) {
+				clearReplayStrokes();
+			});
+			layerArray.push(layer);
 
-		clearReplayStrokes([]);
+			strokeRecorder.setStrokeModel(layer);
+
+			clearReplayStrokes([]);			
+		}
+		else {
+			alert("We reached the maximum number of layers!");
+		}
+		var lastLayerIndex = layerArray.length-1;
+		return lastLayerIndex;
 	};
 
 
@@ -185,6 +194,19 @@ function StrokeLayerManager(strokeRecorder, strokePlayer, paletteControl) {
 			}
 		}
 		alert("Models: " + works);
+	};
+
+	this.selectLayer = function() {
+		var id = $(this).attr('id');
+		var i = id.indexOf('Btn');
+		var digit = id.substr(i-1, 1); // This ony works for a single digit
+		// alert("Selecting layer #" + digit);
+
+		var layer = layerArray[digit];
+
+		strokeRecorder.setStrokeModel(layer);
+		paletteControl.setPalette(layer.palette);
+
 	};
 }
 

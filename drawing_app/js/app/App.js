@@ -36,7 +36,9 @@
 	var strokeLayerManager = new StrokeLayerManager(strokeRecorder, strokePlayer, paletteControl);
 
 	var addLayer = function() {
-		strokeLayerManager.addLayer(); // which creates a new color palette
+		var layerNum = strokeLayerManager.addLayer(); // which creates a new color palette
+
+		$('#editLayer' + layerNum + 'Btn').attr('disabled', null); // Enable!
 
 		var palette = paletteControl.getPalette();
 		currentBrushStyle.color = palette[0];
@@ -52,6 +54,9 @@
 
 		var $checkboxes = $('input[type=checkbox]');
 		$checkboxes.prop('checked', false);
+
+		$('.edit-layer').attr('disabled', 'disabled');
+		$('#editLayer0Btn').attr('disabled', null);
 	};
 
 	resetModel();
@@ -71,6 +76,7 @@
 	$('#removeModelBtn').bind(cursorEventType, strokeLayerManager.removeModel);
 	$('#listModelBtn').bind(cursorEventType, strokeLayerManager.listModels);
 
+	$('.edit-layer').bind(cursorEventType, strokeLayerManager.selectLayer);
 
 	$(window).bind('keydown', function(evt) {
 		if (evt.keyCode == 32) { // Press space for undo last stroke
