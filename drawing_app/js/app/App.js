@@ -55,10 +55,7 @@
 
 	var resetModel = function() {
 		strokeLayerManager.resetModel(); // Set model to empty!
-
-		var palette = paletteControl.getPalette();
-		currentBrushStyle.color = palette[0];
-		currentBrushStyle.applyStyle(userContext);
+		updateBrush();
 
 		var $checkboxes = $('input[type=checkbox]');
 		$checkboxes.prop('checked', false);

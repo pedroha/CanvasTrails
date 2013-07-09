@@ -8,6 +8,8 @@ var testAddLayer = true;
 
 function StrokeLayerManager(strokeRecorder, strokePlayer, paletteControl) {
 
+	var self = this;
+
 	var MAX_LAYERS = 4;
 
 	var layerArray = [];
@@ -53,9 +55,14 @@ function StrokeLayerManager(strokeRecorder, strokePlayer, paletteControl) {
 			timeOffset += durations[i];
 		}
 
-		if (callback && typeof callback === "function" && totalDuration > 0) { // Quite precise!		
+		if (totalDuration > 0) { // Quite precise!		
 			setTimeout(function() {
-				callback();
+				
+				var last = layerArray.length - 1;
+				self.selectLayer(last);
+				
+				//clearReplayStrokesInCurrentLayer();
+				//callback();
 				// alert("Done");
 			}, totalDuration);
 		}
@@ -188,6 +195,7 @@ function StrokeLayerManager(strokeRecorder, strokePlayer, paletteControl) {
 				layerArray.push(layer);
 			}
 
+			/*
 			var self = this;
 
 			var callback = function() {
@@ -199,7 +207,8 @@ function StrokeLayerManager(strokeRecorder, strokePlayer, paletteControl) {
 
 				self.selectLayer(last);				
 			};
-			clearReplayStrokes(callback);
+			*/
+			clearReplayStrokes();
 		}
 	};
 
