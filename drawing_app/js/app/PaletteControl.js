@@ -6,21 +6,23 @@ var PaletteControl = function(domElts, eventType) {
     }
     var self = this;
 
+    var select = function(domElt) {
+        // Unselect all
+        for (var j = 0; j < domElts.length; j++) {
+            domElts[j].setAttribute('class', 'color-panel');
+        }
+        // Select me
+        domElt.setAttribute('class', 'color-panel selected');
+    };
+
     this.setPalette = function(palette) {
         self.palette = palette;
 
-        var select = function(domElt) {
-            // Unselect all
-            for (var j = 0; j < domElts.length; j++) {
-                domElts[j].setAttribute('class', 'color-panel');
-            }
-            // Select me
-            domElt.setAttribute('class', 'color-panel selected');
-        };
-
         var changeColor = function(e) {
             var color = this.style.backgroundColor;
-            self.emit("color-changed", color);
+            var id = this.getAttribute('id');
+            var idx = id.substr("color-".length);
+            self.emit("color-changed", color, idx);
             select(this);
         };
 
@@ -34,6 +36,12 @@ var PaletteControl = function(domElts, eventType) {
 
     this.getPalette = function() {
         return this.palette;
+    }
+
+    this.setSelectecColorIdx = function(idx) {
+        if (idx < domElts.length) {
+            select(domElts[idx]);
+        }
     }
 };
 

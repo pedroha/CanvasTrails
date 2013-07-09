@@ -17,10 +17,6 @@
 	<!--[if lt IE 9]><script type="text/javascript" src="excanvas.js"></script><![endif]-->
     <style>
 
-        #user-drawing {
-            z-index: 100;
-        }
-
         .page {
             height: 700px;
 
@@ -52,22 +48,23 @@
     <div class="page">
     
         <div class="color-container">
+            <div id="color-0" class="color-panel"></div>
             <div id="color-1" class="color-panel"></div>
             <div id="color-2" class="color-panel"></div>
             <div id="color-3" class="color-panel"></div>
             <div id="color-4" class="color-panel"></div>
-            <div id="color-5" class="color-panel"></div>
         </div>
 
         <div id="trail-container">
             <canvas id="user-drawing" class="drawing">No CANVAS support!!</canvas>
             <canvas id="trail-drawing" class="drawing">No CANVAS support!!</canvas>
+            <canvas id="trail-stacked" class="drawing">No CANVAS support!!</canvas>
         </div>
 
         <div id="control-container">
             <input id="restartBtn" type="button" value="Clear All"></button>
             <input id="replayBtn" type="button" value="Replay"></button>
-            <input id="stopBtn" type="button" value="Stop"></button>
+            <!-- input id="stopBtn" type="button" value="Stop"></button -->
             <input id="addLayerBtn" type="button" value="Add Layer"></button>
             <input id="saveModelBtn" type="button" value="Save Model"></button>
             <input id="loadModelBtn" type="button" value="Load Model"></button>
@@ -101,16 +98,17 @@
 
         var userCnv = document.getElementById('user-drawing');
         var trailCnv = document.getElementById('trail-drawing');
+        var trailStackedCnv = document.getElementById('trail-stacked');
 
         // For now we only care the phone size (not useful while integrating with github pages and css)
         var is_phone = (window.innerWidth < 590);
         if (is_phone) {
-           userCnv.width  = trailCnv.width  = 300;
-           userCnv.height = trailCnv.height = 200;
+           userCnv.width  = trailCnv.width  = trailStackedCnv.width  = 300;
+           userCnv.height = trailCnv.height = trailStackedCnv.height = 200;
         }
         else {
-           userCnv.width  = trailCnv.width  = 600;
-           userCnv.height = trailCnv.height = 400;
+           userCnv.width  = trailCnv.width  = trailStackedCnv.width  = 600;
+           userCnv.height = trailCnv.height = trailStackedCnv.height = 400;
         }
     </script>
 

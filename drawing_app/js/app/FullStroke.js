@@ -57,3 +57,21 @@ FullStroke.prototype.replay = function(context, atWhen) {
 	}		
 };
 
+FullStroke.prototype.snapshot = function(context) {
+	var self = this;
+
+	var brushStyle = new BrushStyle(self.styleState.color);
+	
+	brushStyle.applyStyle(context); // Assuming that 'context' is not shared
+
+	context.beginPath();
+	for (var i = 1; i < self.pieces.length; i++) {
+		var p = self.pieces[i];
+		var prev = self.pieces[i-1];
+
+		context.moveTo(prev.x, prev.y);
+		context.lineTo(p.x, p.y);
+	}
+	context.stroke();
+};
+

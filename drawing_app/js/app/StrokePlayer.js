@@ -1,16 +1,15 @@
-function StrokePlayer(trailCanvas) {
-	if (!trailCanvas) {
-		throw new Error("StrokePlayer(): Missing trailCanvas param");
+function StrokePlayer(canvas) {
+	if (!canvas) {
+		throw new Error("StrokePlayer(): Missing canvas param");
 	}
-	this.trailCanvas = trailCanvas;
+	this.canvas = canvas;
 }
 
 StrokePlayer.prototype.clear = function() {
-	var cnv = this.trailCanvas;
+	var cnv = this.canvas;
 
 	cnv.width = cnv.width;
 };
-
 
 StrokePlayer.prototype.getDuration = function(strokes, sequential) {
 	var time = 0;
@@ -30,10 +29,10 @@ StrokePlayer.prototype.getDuration = function(strokes, sequential) {
 		}
 		return max_t;
 	}
-}
+};
 
 StrokePlayer.prototype.play = function(strokes, sequential) {
-	var cnv = this.trailCanvas;
+	var cnv = this.canvas;
 	var c = cnv.getContext('2d');
 	var time = 0;
 
@@ -44,4 +43,15 @@ StrokePlayer.prototype.play = function(strokes, sequential) {
 			time += s.getDuration();
 		}
 	}
-}
+};
+
+StrokePlayer.prototype.snapshot = function(canvas, strokes) {
+	var cnv = canvas;
+	var c = cnv.getContext('2d');
+	var time = 0;
+
+	for (var i=0; i<strokes.length; i++) {
+		var s = strokes[i];
+		s.snapshot(c);
+	}
+};

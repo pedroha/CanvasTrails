@@ -4,11 +4,14 @@
 //   Cancel previous drawing in progress
 //   Recreate a new model and redraw this model
 
+var testAddLayer = true;
+
 function StrokeLayerManager(strokeRecorder, strokePlayer, paletteControl) {
 
 	var MAX_FRAMES = 4;
 
 	var layerArray = [];
+	var selectedLayerIdx = 0;
 
 	var clearReplayStrokes = function() {
 		//alert(layerArray.length);
@@ -16,6 +19,8 @@ function StrokeLayerManager(strokeRecorder, strokePlayer, paletteControl) {
 		for (var i = 0; i < layerArray.length; i++) {
 			layerArray[i].setDrawEnabled(true);
 		}
+		var cnv = document.getElementById('trail-stacked');
+		cnv.width = cnv.width; // clear trail-stacked
 
 		strokeRecorder.clearScreen();
 		var sequential = getSequentialState();
@@ -58,6 +63,22 @@ function StrokeLayerManager(strokeRecorder, strokePlayer, paletteControl) {
 		}
 	};
 
+	if (!testAddLayer) {
+		var clearReplayStrokesInCurrentLayer = clearReplayStrokes;
+	}
+	else {
+		var clearReplayStrokesInCurrentLayer = function() {
+			strokeRecorder.clearScreen();
+
+			strokePlayer.clear();
+
+			var sequential = getSequentialState();
+			var layer = layerArray[selectedLayerIdx];
+			var strokes = layer.strokes;
+			strokePlayer.play(strokes, sequential[selectedLayerIdx]);
+		};
+
+	}
 	this.replay = clearReplayStrokes;
 
 	this.stop = function() {
@@ -69,7 +90,7 @@ function StrokeLayerManager(strokeRecorder, strokePlayer, paletteControl) {
 	this.undoLast = function() {
 		// Hack
 		layerArray[0].undoLast(); // Undo for all of them ?
-		clearReplayStrokes();
+		clearReplayStrokesInCurrentLayer();
 	};
 
 	var cancelDrawing = function() {
@@ -93,25 +114,36 @@ function StrokeLayerManager(strokeRecorder, strokePlayer, paletteControl) {
 		var MAX_LAYERS = 5;
 
 		if (layerArray.length < MAX_LAYERS) {
+			if (testAddLayer) {
+				// Get a snapshot of the previous frames
+				var cnv = document.getElementById('trail-stacked');
+				cnv.width = cnv.width; // clear trail-stacked
+				//var ctx = cnv.getContext('2d');
+				for (var i = 0; i < layerArray.length; i++) {
+					var strokes = layerArray[i].strokes;
+					strokePlayer.snapshot(cnv, strokes);
+				}
+			}
 
 			var layer = new StrokeLayer();
 			layer.palette = getNewPalette();
 			paletteControl.setPalette(layer.palette);
 
 			layer.on("stroke-added", function(data) {
-				clearReplayStrokes();
+				clearReplayStrokesInCurrentLayer();
 			});
 			layerArray.push(layer);
 
 			strokeRecorder.setStrokeModel(layer);
 
-			clearReplayStrokes([]);			
+			clearReplayStrokesInCurrentLayer();
+			//clearReplayStrokes(); // No need to replay
 		}
 		else {
 			alert("We reached the maximum number of layers!");
 		}
-		var lastLayerIndex = layerArray.length-1;
-		return lastLayerIndex;
+		selectedLayerIdx = layerArray.length-1;
+		return selectedLayerIdx;
 	};
 
 
@@ -123,10 +155,8 @@ function StrokeLayerManager(strokeRecorder, strokePlayer, paletteControl) {
 
 	this.saveModel = function() {
 		var name = window.prompt("Enter model title");
-
 		if (name) {
 			// alert("Saving Model " + name);
-
 			var stringData = JSON.stringify(layerArray);
 			var wname = getWorkName(name);
 			localStorage.setItem( wname, stringData);		
@@ -138,12 +168,9 @@ function StrokeLayerManager(strokeRecorder, strokePlayer, paletteControl) {
 		for (var i = 0; i < layerArray.length; i++) {
 			layerArray[i].setDrawEnabled(false);
 		}
-
 		var name = window.prompt("Enter model title");
-
 		if (name) {
 			// alert("Loading Model " + name);
-
 			var wname = getWorkName(name);
 			var stringData = localStorage.getItem(wname);
 			if (!stringData) {
@@ -159,16 +186,15 @@ function StrokeLayerManager(strokeRecorder, strokePlayer, paletteControl) {
 				var layer = new StrokeLayer(model[i]);
 
 				layer.on("stroke-added", function(data) {
-					clearReplayStrokes();
+					clearReplayStrokesInCurrentLayer();
 				});
 				layerArray.push(layer);
 			}
-
 			// Restore last layer model and last palette
 			strokeRecorder.setStrokeModel(layer);
 			paletteControl.setPalette(layer.palette);
 
-			clearReplayStrokes([]);	
+			clearReplayStrokes();	
 		}
 	};
 
@@ -202,12 +228,32 @@ function StrokeLayerManager(strokeRecorder, strokePlayer, paletteControl) {
 		var digit = id.substr(i-1, 1); // This ony works for a single digit
 		// alert("Selecting layer #" + digit);
 
+		selectedLayerIdx = digit;
 		var layer = layerArray[digit];
 
 		strokeRecorder.setStrokeModel(layer);
 		paletteControl.setPalette(layer.palette);
+		paletteControl.setSelectecColorIdx(layer.selectedColorIdx);
 
+		if (testAddLayer) {
+			// Get a snapshot of the previous frames
+			var cnv = document.getElementById('trail-stacked');
+			cnv.width = cnv.width; // clear trail-stacked
+			for (var i = 0; i < selectedLayerIdx; i++) {
+				var strokes = layerArray[i].strokes;
+				strokePlayer.snapshot(cnv, strokes);
+			}
+		}
+		clearReplayStrokesInCurrentLayer();
 	};
+
+	this.setSelectedColorIdx = function(idx) {
+		layerArray[selectedLayerIdx].selectedColorIdx = Number(idx);
+	}
+
+	this.getLayerLength = function() {
+		return layerArray.length;
+	}
 }
 
 var browseLocalStorage = function() {

@@ -87,11 +87,20 @@ body {
 	user-select: none;
 }
 
-	#user-drawing, #trail-drawing {
+	#user-drawing, #trail-drawing, #trail-stacked {
 	    position: absolute;
 	    top: 0;
 	    left: 0;
 	}
+
+    #user-drawing {
+        z-index: 100;
+    }
+
+    #trail-drawing {
+        z-index: 99;
+    }
+
 
 	#log {
 		position: fixed;

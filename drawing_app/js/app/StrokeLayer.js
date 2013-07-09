@@ -5,6 +5,7 @@ function StrokeLayer(model) {
 	// Model state: StrokeLayer = strokes[] + palette
 	this.strokes = [];
 	this.palette = [];
+	this.selectecColorIdx = 0;
 
 	if (model) {
 		this.restore(model);
@@ -25,6 +26,7 @@ StrokeLayer.prototype.restore = function(layer) {
 		this.strokes.push(fullStroke);
 	}
 	this.palette = layer.palette;
+	this.selectedColorIdx = layer.selectedColorIdx;
 };
 
 StrokeLayer.prototype.startStroke = function(state) {

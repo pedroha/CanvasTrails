@@ -14,14 +14,15 @@
 
 	var domElts = [];
 	for (var i = 0; i < 5; i++) {
-	    var elt = document.getElementById('color-' + (i+1));
+	    var elt = document.getElementById('color-' + i);
 	    domElts.push(elt);
 	}
 
 	var cursorEventType = (is_touch) ? "touchstart" : "click"; // Want to get rid of "fastclick.js" (if possible)
 	var paletteControl = new PaletteControl(domElts, cursorEventType);
 
-	paletteControl.on("color-changed", function(color) {
+	paletteControl.on("color-changed", function(color, idx) {
+		strokeLayerManager.setSelectedColorIdx(idx);
 		// alert("Color: " + color);
 		currentBrushStyle.color = color;
 		currentBrushStyle.applyStyle(userContext);
@@ -63,6 +64,12 @@
 
 	var loadModel = function() {
 		strokeLayerManager.loadModel();
+		var layerNum = strokeLayerManager.getLayerLength();
+
+		// Enable for these layerNum layers
+		for (var i = 0; i < layerNum; i++) {
+			$('#editLayer' + i + 'Btn').attr('disabled', null);
+		}
 	};
 
 	$('#restartBtn').bind(cursorEventType, resetModel);
