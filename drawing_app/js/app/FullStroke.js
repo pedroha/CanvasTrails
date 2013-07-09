@@ -3,7 +3,7 @@
 function FullStroke(styleState) {
 	this.pieces = [];
 	this.styleState = styleState;
-	this.continueDraw = true;
+	this.continueDraw = true;		// This is just a Hack. TODO: Cancel out the setTimeout()
 	this._startTime = new Date().getTime();
 }
 
@@ -30,7 +30,7 @@ FullStroke.prototype.getDuration = function() {
 	return duration;
 };
 
-FullStroke.prototype.replay = function(context, atWhen) {
+FullStroke.prototype.replay = function(context, atWhen, outline) {
 	var self = this;
 
 	atWhen = atWhen || 0;
@@ -46,6 +46,10 @@ FullStroke.prototype.replay = function(context, atWhen) {
 					var prev = self.pieces[iter-1];
 
 					brushStyle.applyStyle(context);
+
+					if (outline) {
+						context.lineWidth += 2;
+					}
 
 					context.beginPath();
 					context.moveTo(prev.x, prev.y);

@@ -31,14 +31,14 @@ StrokePlayer.prototype.getDuration = function(strokes, sequential) {
 	}
 };
 
-StrokePlayer.prototype.play = function(strokes, sequential) {
+StrokePlayer.prototype.play = function(strokes, sequential, outline) {
 	var cnv = this.canvas;
 	var c = cnv.getContext('2d');
 	var time = 0;
 
 	for (var i=0; i<strokes.length; i++) {
 		var s = strokes[i];
-		s.replay(c, time);
+		s.replay(c, time, outline);
 		if (sequential) {
 			time += s.getDuration();
 		}
@@ -48,6 +48,8 @@ StrokePlayer.prototype.play = function(strokes, sequential) {
 StrokePlayer.prototype.snapshot = function(canvas, strokes) {
 	var cnv = canvas;
 	var c = cnv.getContext('2d');
+	c.globalAlpha = 0.3; // Half transparent
+
 	var time = 0;
 
 	for (var i=0; i<strokes.length; i++) {

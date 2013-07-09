@@ -14,25 +14,33 @@ var StrokeRecorder = function(userCanvas, brushStyle) {
     this.userCanvas = userCanvas;
     this.brushStyle = brushStyle;
 
+    self.recording = true;
+
 	var c = userCanvas.getContext('2d');
 
     this.brush = {
         startStroke: function(x, y) {
-        	if (!self.strokeModel) {
-        		throw new Error("StrokeRecorder: forgot to setStrokeModel(m)!");
-        	}
-            c.beginPath();
-            c.moveTo(x, y);
-            self.strokeModel.startStroke(brushStyle);
-            self.strokeModel.stroke(x, y);
+            if (self.recording) {
+                if (!self.strokeModel) {
+                    throw new Error("StrokeRecorder: forgot to setStrokeModel(m)!");
+                }
+                c.beginPath();
+                c.moveTo(x, y);
+                self.strokeModel.startStroke(brushStyle);
+                self.strokeModel.stroke(x, y);
+            }
 	    },
         stroke: function(x, y) {
-            c.lineTo(x, y);
-            c.stroke();
-            self.strokeModel.stroke(x, y);
+            if (self.recording) {
+                c.lineTo(x, y);
+                c.stroke();
+                self.strokeModel.stroke(x, y);                
+            }
         },
         strokeEnd: function() {
-        	self.strokeModel.strokeEnd();
+            if (self.recording) {
+                self.strokeModel.strokeEnd();
+            }
         }
     };
 }

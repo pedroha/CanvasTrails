@@ -36,14 +36,21 @@
 
 	var strokeLayerManager = new StrokeLayerManager(strokeRecorder, strokePlayer, paletteControl);
 
-	var addLayer = function() {
-		var layerNum = strokeLayerManager.addLayer(); // which creates a new color palette
-
-		$('#editLayer' + layerNum + 'Btn').attr('disabled', null); // Enable!
-
+	var updateBrush = function() {
 		var palette = paletteControl.getPalette();
 		currentBrushStyle.color = palette[0];
 		currentBrushStyle.applyStyle(userContext);
+	};
+
+	var addLayer = function() {
+		var layerNum = strokeLayerManager.addLayer(); // which creates a new color palette
+		$('#editLayer' + layerNum + 'Btn').attr('disabled', null); // Enable!
+		updateBrush();
+	};
+
+	var selectLayer = function(evt) {
+		strokeLayerManager.selectLayer.call(this);
+		updateBrush();
 	};
 
 	var resetModel = function() {
@@ -72,6 +79,7 @@
 		}
 	};
 
+
 	$('#restartBtn').bind(cursorEventType, resetModel);
 	$('#replayBtn').bind(cursorEventType, strokeLayerManager.replay);
 	$('#stopBtn').bind(cursorEventType, strokeLayerManager.stop);
@@ -83,7 +91,7 @@
 	$('#removeModelBtn').bind(cursorEventType, strokeLayerManager.removeModel);
 	$('#listModelBtn').bind(cursorEventType, strokeLayerManager.listModels);
 
-	$('.edit-layer').bind(cursorEventType, strokeLayerManager.selectLayer);
+	$('.edit-layer').bind(cursorEventType, selectLayer);
 
 	$(window).bind('keydown', function(evt) {
 		if (evt.keyCode == 32) { // Press space for undo last stroke
